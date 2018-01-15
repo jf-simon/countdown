@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Countdown
+Exec=@GADGET_DIR@/countdown
+Icon=error

@@ -1,0 +1,226 @@
+images {
+   image: "module_icon.png" COMP;
+   image: "module_icon1.png" COMP;
+   image: "module_icon_world_white.png" COMP;
+   image: "module_icon_world_black.png" COMP;
+}
+
+color_classes {
+    color_class {
+       name: "colorclass";
+       color: 223 147 37 255;
+    }
+}
+
+collections {
+   group {
+         sounds {
+         sample { name: "bell" LOSSY 64;
+            source: "bell.wav";
+         }
+         }
+      name: "countdown";
+//       max: 500 500;
+      min: 1 1;
+      parts {
+         part { 
+            name: "background";
+            type : RECT;
+            scale: 1;
+            description {
+               state: "default" 0.0;
+               aspect: 1 1;
+               aspect_preference: BOTH;
+               color_class: "colorclass";
+               rel1.relative: 0.045 0.045;
+               rel2.relative: 0.955 0.955;
+               visible: 1;
+					}
+				}
+         part { 
+            name: "name";
+            type : TEXT;
+            scale: 1;
+//             entry_mode: PLAIN;
+            description {
+               state: "default" 0.0;
+               rel1.relative: 0.05 0.09;
+               rel2.relative: 0.95 0.3;
+               align: 0.0 0.5;
+               visible: 1;
+               color: 255 255 255 255;
+               text{
+               text: "Countdown";
+               size: 10;
+               fit: 0 1;
+//                ellipsis: 1.0;
+               }
+					}
+				}
+         part { 
+            name: "time";
+            type : TEXT;
+            scale: 1;
+            mouse_events: 1;
+            description {
+               state: "default" 0.0;
+//                rel1.relative: 0.0 0.2;
+//                rel2.relative: 1.0 0.9;
+               rel1.relative: 0.05 0.3;
+//                rel1.to: "name";
+               rel2.relative: 0.95 0.7;
+//                rel2.to: "unit";
+               align: 0.5 0.5;
+               visible: 1;
+               color: 255 255 255 255;
+               text.size: 15;
+               text.fit: 1 0;
+               text.ellipsis: -1.0;
+               text.text: "0";
+					}
+				}
+         part { 
+            name: "unit";
+            type : TEXT;
+            scale: 1;
+            description {
+               state: "default" 0.0;
+               rel1.relative: 0.05 0.7;
+               rel2.relative: 0.95 0.91;
+               align: 0.5 0.5;
+               visible: 1;
+               color: 255 255 255 255;
+               text.text: "";
+               text.size: 8;
+               text.fit: 1 0;
+               text.ellipsis: -1.0;
+					}
+				}
+//          part { 
+//             name: "minus";
+//             type : RECT;
+//             scale: 1;
+//             description {
+//                state: "default" 0.0;
+//                color: 255 255 255 0;
+//                rel1.relative: 0.05 0.05;
+//                rel2.relative: 0.5 0.95;
+//                visible: 1;
+// 					}
+// 				description {
+//                state: "on" 0.0;
+//                color: 255 255 255 128;
+//                rel1.relative: 0.05 0.05;
+//                rel2.relative: 0.5 0.95;
+//                visible: 1;
+// 					}
+// 				}
+//          part { 
+//             name: "plus";
+//             type : RECT;
+//             scale: 1;
+//             description {
+//                state: "default" 0.0;
+//                color: 255 255 255 0;
+//                rel1.relative: 0.5 0.05;
+//                rel2.relative: 0.95 0.95;
+//                visible: 1;
+// 					}
+// 				description {
+//                state: "on" 0.0;
+//                color: 255 255 255 128;
+//                rel1.relative: 0.5 0.05;
+//                rel2.relative: 0.95 0.95;
+//                visible: 1;
+// 					}
+// 				}
+//          part { 
+//             name: "r_klick";
+//             type : RECT;
+//             scale: 1;
+//             mouse_events: 1;
+//             description {
+//                state: "default" 0.0;
+//                rel1.relative: 0.5 0.0;
+//                rel2.relative: 1.0 1.0;
+//                color: 23 255 255 0;
+//                visible: 1;
+// 					}
+// 				}
+//          part { 
+//             name: "l_klick";
+//             type : RECT;
+//             scale: 1;
+//             mouse_events: 1;
+//             description {
+//                state: "default" 0.0;
+//                rel1.relative: 0.0 0.0;
+//                rel2.relative: 0.5 1.0;
+//                color: 23 255 255 0;
+//                visible: 1;
+// 					}
+// 				}
+//          }
+         
+      programs {
+         program {
+            name: "play_sound";
+            signal: "bell_ring"; 
+            source: "bell_ring";
+            action: PLAY_SAMPLE "bell" 3.0;
+         }
+//          program {
+//             name: "click_settings";
+//             signal: "mouse,down,3";
+//             source: "l_klick";
+//             action: SIGNAL_EMIT "settings" "settings";
+//          }
+//          program {
+//             name: "click_settings1";
+//             signal: "mouse,down,3";
+//             source: "r_klick";
+//             action: SIGNAL_EMIT "settings" "settings";
+//          }
+//          program {
+//             name: "click_plus";
+//             signal: "mouse,down,1";
+//             source: "r_klick";
+//             action: SIGNAL_EMIT "plus" "plus";
+//          }
+//          program {
+//             name: "click_minus";
+//             signal: "mouse,down,1";
+//             source: "l_klick";
+//             action: SIGNAL_EMIT "minus" "minus";
+//          }
+//          program {
+//             name: "plus_in";
+//             signal: "mouse,in";
+//             source: "r_klick";
+//             action: STATE_SET "on" 0.0;
+//             target: "plus";
+//          }
+//          program {
+//             name: "plus_out";
+//             signal: "mouse,out";
+//             source: "r_klick";
+//             action: STATE_SET "default" 0.0;
+//             target: "plus";
+//          }
+//          program {
+//             name: "minus_in";
+//             signal: "mouse,in";
+//             source: "l_klick";
+//             action: STATE_SET "on" 0.0;
+//             target: "minus";
+//          }
+//          program {
+//             name: "minus_out";
+//             signal: "mouse,out";
+//             source: "l_klick";
+//             action: STATE_SET "default" 0.0;
+//             target: "minus";
+//          }
+      }
+      }
+}
