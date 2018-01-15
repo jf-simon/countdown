@@ -231,6 +231,7 @@ set_color(Evas_Object *ly)
 	printf("SET COLOR: %i %i %i %i,\n", ci_r,ci_g,ci_b,ci_a);
 }
 
+
 _sec_timer(void *data)
 {
    Evas_Object *edje_obj = elm_layout_edje_get(data);
@@ -370,48 +371,6 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 }
 
 
-void
-_plus(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
-{
-// 	Evas_Object *win = data;
-	Evas_Object *ly = obj;
-	
-   char buf[4096];
-	ci_value = ci_value + ci_factor;	
-	
-	double new = floor(ci_value);
-	
-	if(fmod(ci_value, new) == 0)
-		snprintf(buf, sizeof(buf), "%.0f", ci_value);
-	else
-		snprintf(buf, sizeof(buf), "%.2f", ci_value);
-	
-	edje_object_part_text_set(ly, "hour", buf);
-	
-	_config_save(NULL, NULL, NULL, NULL);
-}
-
-
-void
-_minus(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
-{
-	Evas_Object *ly = obj;
-   char buf[4096];
-	ci_value = ci_value - ci_factor;
-	
-	double new = floor(ci_value);
-	
-	if(fmod(ci_value, new) == 0)
-		snprintf(buf, sizeof(buf), "%.0f", ci_value);
-	else
-		snprintf(buf, sizeof(buf), "%.2f", ci_value);
-	
-	edje_object_part_text_set(ly, "hour", buf);
-	
-	_config_save(NULL, NULL, NULL, NULL);
-}
-
-
 int elm_main(int argc, char *argv[])
 {
    char buf[PATH_MAX];
@@ -461,25 +420,7 @@ int elm_main(int argc, char *argv[])
 	elm_layout_file_set(ly, buf, "countdown");
 	
 //    edje_object_signal_callback_add(ly, "settings", "settings", _settings_2, win);
-   edje_object_signal_callback_add(ly, "minus", "minus", _minus, win);
-   edje_object_signal_callback_add(ly, "plus", "plus", _plus, win);
-	
-	// SET SWALLOWS
-/*	
-    Evas_Object *en = elm_entry_add(win);
-    elm_entry_line_wrap_set(en, ELM_WRAP_WORD);
-    elm_entry_single_line_set(en, EINA_TRUE);
-   elm_entry_editable_set(en, EINA_TRUE);
-    elm_object_text_set(en, "00:20:07");
-    evas_object_size_hint_weight_set(en, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-    evas_object_size_hint_align_set(en, 0.5, 0.5);
-	
-   evas_object_show(en);
-	
-    elm_object_part_content_set(ly, "value", en);
-	*/
-	// END SWALLOWS
-	
+
 	
 	
 	
