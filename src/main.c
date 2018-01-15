@@ -214,8 +214,7 @@ _set_content(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA
 	sec1 = 0;
 	sec = 0;
 	
-	snprintf(buf, sizeof(buf), "00:00:00", ci_value);
-	edje_object_part_text_set(ly, "time", buf);
+	edje_object_part_text_set(ly, "time", "00:00:00");
 		
 	printf("set content\n");
 }
@@ -263,6 +262,7 @@ _sec_timer(void *data)
 
 _alarm_timer(void *data)
 {
+	const char buf[64];
 
    Evas_Object *edje_obj = elm_layout_edje_get(data);
 	edje_object_part_text_set(edje_obj, "name", "ended");
@@ -288,6 +288,8 @@ _alarm_timer(void *data)
 	   timer_sec = NULL;
 	   timer_all = NULL;
    }
+
+	edje_object_part_text_set(edje_obj, "time", "00:00:00");
 	  
    return ECORE_CALLBACK_CANCEL;
 }
@@ -300,6 +302,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    Evas_Event_Key_Down *ev = event_info;
    Eina_Bool ctrl = evas_key_modifier_is_set(ev->modifiers, "Control");
    const char *k = ev->keyname;
+	
 	
    if(!strcmp(k, "1") || !strcmp(k, "2") || !strcmp(k, "3") || !strcmp(k, "4") || !strcmp(k, "5") || !strcmp(k, "6") || !strcmp(k, "7") || !strcmp(k, "8") || !strcmp(k, "9") || !strcmp(k, "0"))
    {
@@ -319,6 +322,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 				
 	   edje_object_part_text_set(edje_obj, "time", buf);
    }
+		
 		
    if(!strcmp(k, "Return") || !strcmp(k, "KP_Enter"))
    {
@@ -355,19 +359,6 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 	   timer_all = ecore_timer_add(countdown_time, _alarm_timer, ly);
 
       edje_object_part_text_set(edje_obj, "name", "running");
-		
-		
-
-
-/*			
-		
-		if(imin != min_new)
-			hour_new++;	
-		else
-			min_new = imin;
-*/
-			
-		printf("FMOD SEC: %f\n", isec);
    }
 
 
@@ -395,6 +386,35 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 			timer_sec = NULL;
 		}		
    }
+   
+   if(!strcmp(k, "space"))
+   {
+		if(!strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
+			return;
+		
+		if(timer_all && ecore_timer_freeze_get(timer_all))
+		{
+		   ecore_timer_thaw(timer_all);
+			edje_object_part_text_set(edje_obj, "name", "running");
+		}
+		else
+		{
+		   ecore_timer_freeze(timer_all);
+         edje_object_part_text_set(edje_obj, "name", "paused");
+		}
+		
+		if(timer_sec && ecore_timer_freeze_get(timer_sec))
+		{
+		   ecore_timer_thaw(timer_sec);
+		}
+		else
+		{
+		   ecore_timer_freeze(timer_sec);
+		}
+
+   }
+   
+
    printf("KEY: %s\n", k);
 
 }
