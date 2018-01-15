@@ -31,12 +31,12 @@ _config_load(void *data)
 		ci_unit = eina_stringshare_add("UNIT");
 		ci_value = 0;
 		ci_factor= 1;
-		ci_r = 11;
-		ci_g = 54;
-		ci_b = 71;
+		ci_r = 116;
+		ci_g = 13;
+		ci_b = 14;
 		ci_a = 255;
 	}
-	
+
 	printf("LOAD FOUND: %i\n", found);
 }
 
