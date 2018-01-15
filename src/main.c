@@ -323,10 +323,31 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    if(!strcmp(k, "Return") || !strcmp(k, "KP_Enter"))
    {
 		char time_buf[64];
-// 	   elm_object_part_text_get(ly, "time");
 		
 		if(timer_all != NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
 			return;
+		
+		
+		hour_new = hour1*10 + hour;
+		min_new = min1*10 + min;
+		sec_new = sec1*10 + sec;
+
+		int buf = 0;
+		double isec = fmod(sec_new, 60);
+		
+		if(isec == sec_new)
+			printf("");
+		else
+			min_new++;
+			sec_new = isec;
+
+		double imin = fmod(min_new, 60);
+		
+		if(imin == min_new)
+			printf("");
+		else
+			hour_new++;
+			min_new = imin;
 		
       int countdown_time = (((hour1*10) + hour)*3600) + (((min1*10) + min)*60) + (((sec1*10) + sec));
 		
@@ -335,10 +356,18 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 
       edje_object_part_text_set(edje_obj, "name", "running");
 		
-		hour_new = hour1*10 + hour;
-		min_new = min1*10 + min;
-		sec_new = sec1*10 + sec;
+		
 
+
+/*			
+		
+		if(imin != min_new)
+			hour_new++;	
+		else
+			min_new = imin;
+*/
+			
+		printf("FMOD SEC: %f\n", isec);
    }
 
 
@@ -419,7 +448,7 @@ int elm_main(int argc, char *argv[])
    evas_object_show(win);
 	elm_layout_file_set(ly, buf, "countdown");
 	
-//    edje_object_signal_callback_add(ly, "settings", "settings", _settings_2, win);
+   edje_object_signal_callback_add(ly, "settings", "settings", _settings_2, win);
 
 	
 	
@@ -429,12 +458,11 @@ int elm_main(int argc, char *argv[])
 // 	evas_object_smart_callback_add(win, "gadget_site_orient", orient_change, ly);
 //    evas_object_smart_callback_add(win, "gadget_site_anchor", anchor_change, ly);
    evas_object_smart_callback_add(win, "gadget_configure", _settings_1, edje_obj);
-//    evas_object_smart_callback_add(win, "gadget_removed", _delete_id, NULL);
 	ecore_event_handler_add(ECORE_EVENT_SIGNAL_USER, _gadget_exit, NULL);
 	
     evas_object_event_callback_add(win, EVAS_CALLBACK_KEY_DOWN, key_down, ly);
 	
-	_config_load(ly);							// load config data from eet to tmp vars
+	_config_load(ly);
 	
 	set_color(edje_obj);
 	
