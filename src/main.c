@@ -26,9 +26,9 @@ typedef struct {
 typedef struct {
         int         id;
         const char *name;
-        const char *unit;
-        double      value;
-        double      factor;
+//         const char *unit;
+//         double      value;
+//         double      factor;
 		  int         r;
 	     int         g;
         int         b;
@@ -62,9 +62,9 @@ _my_conf_descriptor_init(void)
 
     MY_CONF_SUB_ADD_BASIC(id, EET_T_INT);
     MY_CONF_SUB_ADD_BASIC(name, EET_T_STRING);
-    MY_CONF_SUB_ADD_BASIC(unit, EET_T_STRING);
-	 MY_CONF_SUB_ADD_BASIC(value, EET_T_DOUBLE);
-	 MY_CONF_SUB_ADD_BASIC(factor, EET_T_DOUBLE);
+//     MY_CONF_SUB_ADD_BASIC(unit, EET_T_STRING);
+// 	 MY_CONF_SUB_ADD_BASIC(value, EET_T_DOUBLE);
+// 	 MY_CONF_SUB_ADD_BASIC(factor, EET_T_DOUBLE);
 	 MY_CONF_SUB_ADD_BASIC(r, EET_T_INT);
     MY_CONF_SUB_ADD_BASIC(g, EET_T_INT);
     MY_CONF_SUB_ADD_BASIC(b, EET_T_INT);
