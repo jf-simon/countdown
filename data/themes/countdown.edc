@@ -70,6 +70,7 @@ collections {
 //                rel1.to: "name";
                rel2.relative: 0.945 0.7;
 //                rel2.to: "unit";
+					rel.to: "background";
                align: 0.5 0.5;
                visible: 1;
                color: 255 255 255 255;
@@ -85,14 +86,15 @@ collections {
             scale: 1;
             description {
                state: "default" 0.0;
-               rel1.relative: 0.05 0.7;
-               rel2.relative: 0.95 0.91;
-               align: 0.5 0.5;
+               rel1.relative: 0.15 0.7;
+               rel2.relative: 0.85 0.91;
+//                align: 0.5 0.0;
                visible: 1;
                color: 255 255 255 255;
-               text.text: "";
+//                text.text: "00:00:00";
                text.size: 8;
                text.fit: 1 0;
+               text.align: 0.5 0.2;
                text.ellipsis: -1.0;
 					}
 				}
@@ -101,7 +103,13 @@ collections {
             name: "play_sound";
             signal: "bell_ring"; 
             source: "bell_ring";
-            action: PLAY_SAMPLE "bell" 3.0;
+            action: PLAY_SAMPLE "bell" 1.25 ALERT;
+         }
+         program {
+            name: "click_settings1";
+            signal: "mouse,down,3";
+            source: "*";
+            action: SIGNAL_EMIT "settings" "settings";
          }
       }
       }
