@@ -393,7 +393,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 	   timer_sec = ecore_timer_add(1, _sec_timer, ly);
 	   timer_all = ecore_timer_add(countdown_time, _alarm_timer, ly);
 
-      edje_object_part_text_set(edje_obj, "name", "");
+      edje_object_part_text_set(edje_obj, "name", ci_name);
    }
 
 
