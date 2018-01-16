@@ -21,7 +21,7 @@ _config_load(void *data)
 			ci_g = list_data->g;
 			ci_b = list_data->b;
 			ci_a = list_data->a;
-			ci_a = list_data->bell;
+			ci_bell = list_data->bell;
 			found = 1;
 		}
    }
@@ -228,7 +228,6 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    elm_check_state_set(check_bell, ci_bell);
    E_ALIGN(check_bell, 0.0, 0.0);
  	E_WEIGHT(check_bell, EVAS_HINT_EXPAND, 0);
-//    evas_object_smart_callback_add(check_bell, "changed", _check_changed, inst);
 	elm_box_pack_end(box_settings, check_bell);
 	evas_object_show(check_bell);
    evas_object_data_set(mainbox, "check_bell", check_bell);	

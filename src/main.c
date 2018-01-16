@@ -487,7 +487,7 @@ int elm_main(int argc, char *argv[])
 	
    //new window
    win = elm_win_add(NULL, "countdown", ELM_WIN_BASIC);
-   elm_win_title_set(win, "Counter");
+   elm_win_title_set(win, "Countdown");
    elm_win_autodel_set(win, EINA_TRUE);
    elm_win_alpha_set(win, EINA_TRUE);	
 
