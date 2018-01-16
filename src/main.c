@@ -6,6 +6,7 @@ Evas_Object *ly = NULL;
 
 static    Ecore_Timer *timer_all = NULL;
 static    Ecore_Timer *timer_sec = NULL;
+static    Ecore_Timer *timer_over = NULL;
 // static E_Gadget_Site_Orient gorient;
 // static E_Gadget_Site_Anchor ganchor;
    int sec1;
@@ -251,7 +252,11 @@ _sec_timer(void *data)
 		else
 			min_new--;
 		
-   snprintf(buf, sizeof(buf), "%02i:%02i:%02i", hour_new, min_new, sec_new);
+		
+	if(hour_new == 00)
+		snprintf(buf, sizeof(buf), "%02i:%02i", min_new, sec_new);
+	else
+     snprintf(buf, sizeof(buf), "%02i:%02i:%02i", hour_new, min_new, sec_new);
 
    edje_object_part_text_set(edje_obj, "time", buf);
    printf("SEC: %i\n", sec_new);
@@ -260,12 +265,38 @@ _sec_timer(void *data)
 }
 
 
+_alarm_over(void *data)
+{
+   Evas_Object *edje_obj = elm_layout_edje_get(data);
+	const char buf[64];
+		
+	if(sec_new == 59)
+		sec_new = 0;
+	else
+		sec_new++;
+	
+	if(sec_new == 0 )
+		min_new++;
+	
+// 	if(min_new == 0)
+// 		hour_new++;
+		
+   snprintf(buf, sizeof(buf), "-%02i:%02i:%02i", hour_new, min_new, sec_new);
+
+   edje_object_part_text_set(edje_obj, "unit", buf);
+   printf("SEC: %i\n", sec_new);
+	
+   return ECORE_CALLBACK_RENEW;
+}
+
+
+
 _alarm_timer(void *data)
 {
 	const char buf[64];
 
    Evas_Object *edje_obj = elm_layout_edje_get(data);
-	edje_object_part_text_set(edje_obj, "name", "ended");
+	edje_object_part_text_set(edje_obj, "name", "finished");
 	
 	edje_object_signal_emit(edje_obj, "bell_ring", "bell_ring");
 	
@@ -290,6 +321,8 @@ _alarm_timer(void *data)
    }
 
 	edje_object_part_text_set(edje_obj, "time", "00:00:00");
+	
+	   timer_over = ecore_timer_add(1, _alarm_over, ly);
 	  
    return ECORE_CALLBACK_CANCEL;
 }
@@ -306,8 +339,10 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 	
    if(!strcmp(k, "1") || !strcmp(k, "2") || !strcmp(k, "3") || !strcmp(k, "4") || !strcmp(k, "5") || !strcmp(k, "6") || !strcmp(k, "7") || !strcmp(k, "8") || !strcmp(k, "9") || !strcmp(k, "0"))
    {
-		if(timer_all != NULL)
+		if(timer_all != NULL || timer_over != NULL )
 			return;
+		
+      edje_object_part_text_set(edje_obj, "name", "Countdown");
 		
 		char buf[64];
 
@@ -358,11 +393,11 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 	   timer_sec = ecore_timer_add(1, _sec_timer, ly);
 	   timer_all = ecore_timer_add(countdown_time, _alarm_timer, ly);
 
-      edje_object_part_text_set(edje_obj, "name", "running");
+      edje_object_part_text_set(edje_obj, "name", "");
    }
 
 
-   if(!strcmp(k, "BackSpace") || !strcmp(k, "Delete"))
+   if(!strcmp(k, "BackSpace") || !strcmp(k, "Delete") || !strcmp(k, "Escape"))
    {
 		hour1 = 0;
 		hour = 0;
@@ -373,6 +408,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		
       edje_object_part_text_set(edje_obj, "name", "Countdown");
 		edje_object_part_text_set(edje_obj, "time", "00:00:00");
+		edje_object_part_text_set(edje_obj, "unit", "");
 
 				
 		if (timer_all)
@@ -384,6 +420,11 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		{
 		   ecore_timer_del(timer_sec);
 			timer_sec = NULL;
+		}
+		if (timer_over)
+		{
+		   ecore_timer_del(timer_over);
+			timer_over = NULL;
 		}		
    }
    
@@ -395,7 +436,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		if(timer_all && ecore_timer_freeze_get(timer_all))
 		{
 		   ecore_timer_thaw(timer_all);
-			edje_object_part_text_set(edje_obj, "name", "running");
+			edje_object_part_text_set(edje_obj, "name", "");
 		}
 		else
 		{
@@ -411,9 +452,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		{
 		   ecore_timer_freeze(timer_sec);
 		}
-
    }
-   
 
    printf("KEY: %s\n", k);
 
