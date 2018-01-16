@@ -14,9 +14,9 @@ _config_load(void *data)
 	   if(list_data->id == id_num)
 		{
 			ci_name = eina_stringshare_add(list_data->name);
-			ci_unit = eina_stringshare_add(list_data->unit);
-			ci_value = list_data->value;
-			ci_factor = list_data->factor;
+// 			ci_unit = eina_stringshare_add(list_data->unit);
+// 			ci_value = list_data->value;
+// 			ci_factor = list_data->factor;
 			ci_r = list_data->r;
 			ci_g = list_data->g;
 			ci_b = list_data->b;
@@ -28,9 +28,9 @@ _config_load(void *data)
    if(found == 0)
 	{
 		ci_name = eina_stringshare_add("NAME");
-		ci_unit = eina_stringshare_add("UNIT");
-		ci_value = 0;
-		ci_factor= 1;
+// 		ci_unit = eina_stringshare_add("UNIT");
+// 		ci_value = 0;
+// 		ci_factor= 1;
 		ci_r = 116;
 		ci_g = 13;
 		ci_b = 14;
@@ -56,27 +56,27 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
    Evas_Object *ly = evas_object_data_get(mainbox, "ly");
 	
 	
-	if(data != NULL)
-	{
+// 	if(data != NULL)
+// 	{
    Evas_Object *en_name = evas_object_data_get(mainbox, "en_name");
-   Evas_Object *en_unit = evas_object_data_get(mainbox, "en_unit");
-   Evas_Object *en_value = evas_object_data_get(mainbox, "en_value");
-   Evas_Object *en_factor = evas_object_data_get(mainbox, "en_factor");
+//    Evas_Object *en_unit = evas_object_data_get(mainbox, "en_unit");
+//    Evas_Object *en_value = evas_object_data_get(mainbox, "en_value");
+//    Evas_Object *en_factor = evas_object_data_get(mainbox, "en_factor");
 	ci_name = elm_object_text_get(en_name);
-	ci_unit = elm_object_text_get(en_unit);
-	ci_value = atof(elm_object_text_get(en_value));
-	ci_factor = atof(elm_object_text_get(en_factor));
-	}
-	
+// 	ci_unit = elm_object_text_get(en_unit);
+// 	ci_value = atof(elm_object_text_get(en_value));
+// 	ci_factor = atof(elm_object_text_get(en_factor));
+// 	}
+// 	
    EINA_LIST_FOREACH(configlist, l, list_data)
    {
 	   if(list_data->id == id_num)
 		{
 			list_data->name = ci_name;
-			list_data->unit = ci_unit;
+// 			list_data->unit = ci_unit;
 // 			list_data->value = atof(elm_object_text_get(en_value));
-			list_data->value = ci_value;
-			list_data->factor = ci_factor;
+// 			list_data->value = ci_value;
+// 			list_data->factor = ci_factor;
 			list_data->r = ci_r;
 			list_data->g = ci_g;
 			list_data->b = ci_b;
@@ -89,9 +89,9 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 	{
 		list_data1->id = id_num;
 		list_data1->name = ci_name;
-		list_data1->unit = ci_unit;
-		list_data1->value = ci_value;
-		list_data1->factor = ci_factor;
+// 		list_data1->unit = ci_unit;
+// 		list_data1->value = ci_value;
+// 		list_data1->factor = ci_factor;
 		list_data1->r = ci_r;
 		list_data1->g = ci_g;
 		list_data1->b = ci_b;
@@ -100,18 +100,17 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 		configlist = eina_list_append(configlist, list_data1);
 	}
 
-//    ci_name = elm_object_text_get(hoversel);
 
 	printf("SAVE FOUND: %i\n", found);
 _save_eet();
 _set_content(ly, NULL, NULL, NULL);
 }
 
-
+/*
 unsigned int createHEX(int r, int g, int b, int a)
 {
 	return ((r & 0xff) << 24) + ((g & 0xff) << 16) + ((b & 0xff) << 8) + (a & 0xff);
-}
+}*/
 
 
 static void
@@ -186,37 +185,6 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    elm_box_horizontal_set(box_settings, EINA_FALSE);
    E_EXPAND(box_settings);
    evas_object_show(box_settings);
-/*	
-	
-   ic = elm_icon_add(box_settings);
-	snprintf(buf, sizeof(buf), "%s/images/module_icon1.png", PACKAGE_DATA_DIR);
-	elm_image_file_set(ic, buf, NULL);
-   evas_object_size_hint_weight_set(ic, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-   evas_object_size_hint_align_set(ic, EVAS_HINT_FILL, EVAS_HINT_FILL);
-   evas_object_size_hint_min_set(ic, 56, 56);
-	evas_object_color_set(ic, ci_r, ci_g, ci_b, ci_a);
-	elm_box_pack_end(box_settings, ic);
-
-   evas_object_data_set(mainbox, "ic", ic);
-   evas_object_show(ic);*/
-/*
-   tg_theme = elm_check_add(box_settings);
-   elm_object_style_set(tg_theme, "toggle");
-   elm_object_text_set(tg_theme, gettext("Theme: "));
-	elm_check_state_set(tg_theme, ci_theme);
-   elm_object_part_text_set(tg_theme, "on", gettext("Black"));
-   elm_object_part_text_set(tg_theme, "off", gettext("White"));
-   elm_box_pack_end(box_settings, tg_theme);
-   evas_object_show(tg_theme);
-	evas_object_data_set(mainbox, "tg_theme", tg_theme);
-	
-	
-	o = elm_separator_add(box_settings);
-   elm_separator_horizontal_set(o, EINA_TRUE);
-   elm_box_pack_end(box_settings, o);
-   evas_object_show(o);
-	
-	*/
 	
 	cs = elm_colorselector_add(box_settings);
    evas_object_size_hint_weight_set(cs, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -247,14 +215,13 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    evas_object_show(cs);
 	evas_object_data_set(mainbox, "cs", cs);
 	
-	
 	o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
    elm_box_pack_end(box_settings, o);
    evas_object_show(o);
-	
+
    en_name = elm_entry_add(box_settings);
-//    elm_config_context_menu_disabled_set(EINA_TRUE);
+   elm_config_context_menu_disabled_set(EINA_TRUE);
    elm_object_text_set(en_name, ci_name);
    elm_entry_editable_set(en_name, EINA_TRUE);
    elm_entry_single_line_set(en_name, EINA_TRUE);
@@ -264,11 +231,13 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 	evas_object_show(en_name);
    evas_object_data_set(mainbox, "en_name", en_name);
 
+/*
 	o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
    elm_box_pack_end(box_settings, o);
    evas_object_show(o);
-	
+	*/
+/*
    en_unit = elm_entry_add(box_settings);
 //    elm_config_context_menu_disabled_set(EINA_TRUE);
    elm_object_text_set(en_unit, ci_unit);
@@ -279,16 +248,17 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 	elm_box_pack_end(box_settings, en_unit);
 	evas_object_show(en_unit);
    evas_object_data_set(mainbox, "en_unit", en_unit);	
-
+   */
+/*
 	o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
    elm_box_pack_end(box_settings, o);
    evas_object_show(o);
-	
+	*/
 	
    en_value = elm_entry_add(box_settings);
 //    elm_config_context_menu_disabled_set(EINA_TRUE);
-	
+/*	
 	char buf1[4096];
    snprintf(buf1, sizeof(buf1), "%.2f", ci_value);
 	
@@ -300,12 +270,14 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 	elm_box_pack_end(box_settings, en_value);
 	evas_object_show(en_value);
    evas_object_data_set(mainbox, "en_value", en_value);	
-				
+*/
+/*
 	o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
    elm_box_pack_end(box_settings, o);
    evas_object_show(o);
-	
+*/
+/*	
    en_factor = elm_entry_add(box_settings);
 //    elm_config_context_menu_disabled_set(EINA_TRUE);
 	
@@ -318,7 +290,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    evas_object_size_hint_align_set(en_factor, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	elm_box_pack_end(box_settings, en_factor);
 	evas_object_show(en_factor);
-   evas_object_data_set(mainbox, "en_factor", en_factor);
+   evas_object_data_set(mainbox, "en_factor", en_factor);*/
 
    o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
@@ -340,10 +312,10 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 //    evas_object_smart_callback_add(tg_theme, "changed", _config_save, mainbox);
 	
 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
-   evas_object_smart_callback_add(en_name, "changed", _config_save, mainbox);
-   evas_object_smart_callback_add(en_unit, "changed", _config_save, mainbox);
-   evas_object_smart_callback_add(en_value, "changed", _config_save, mainbox);
-   evas_object_smart_callback_add(en_factor, "changed", _config_save, mainbox);
+//    evas_object_smart_callback_add(en_name, "changed", _config_save, mainbox);
+//    evas_object_smart_callback_add(en_unit, "changed", _config_save, mainbox);
+//    evas_object_smart_callback_add(en_value, "changed", _config_save, mainbox);
+//    evas_object_smart_callback_add(en_factor, "changed", _config_save, mainbox);
 	evas_object_smart_callback_add(cs, "changed", _colorselector_changed_cb, mainbox); 
 	
 
