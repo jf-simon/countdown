@@ -156,13 +156,13 @@ _settings_2(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, cons
 void
 _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 {	
-	Evas_Object *en_name, *en_unit, *en_value, *en_factor, *popup, *fr, *cs;
+	Evas_Object *en_name, *popup, *fr, *cs;
    Evas_Object *o, *mainbox, *box_settings;
    Evas_Object *check_bell;
 	
 	Evas_Object *ly = obj;
 	Evas_Object *win = data;
-   char buf[PATH_MAX];
+//    char buf[PATH_MAX];
 
 		  
    popup = elm_win_add(win, "win", ELM_WIN_BASIC);
@@ -328,7 +328,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 //    evas_object_smart_callback_add(tg_theme, "changed", _tg_changed_cb, ic);
 //    evas_object_smart_callback_add(tg_theme, "changed", _config_save, mainbox);
 	
-	Evas_Object *edje_obj = elm_layout_edje_get(ly);
+// 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
 //    evas_object_smart_callback_add(en_name, "changed", _config_save, mainbox);
 //    evas_object_smart_callback_add(en_unit, "changed", _config_save, mainbox);
 //    evas_object_smart_callback_add(en_value, "changed", _config_save, mainbox);
