@@ -21,6 +21,7 @@ _config_load(void *data)
 			ci_g = list_data->g;
 			ci_b = list_data->b;
 			ci_a = list_data->a;
+			ci_a = list_data->bell;
 			found = 1;
 		}
    }
@@ -35,6 +36,7 @@ _config_load(void *data)
 		ci_g = 13;
 		ci_b = 14;
 		ci_a = 255;
+		ci_bell = 0;
 	}
 
 	printf("LOAD FOUND: %i\n", found);
@@ -59,10 +61,9 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 // 	if(data != NULL)
 // 	{
    Evas_Object *en_name = evas_object_data_get(mainbox, "en_name");
-//    Evas_Object *en_unit = evas_object_data_get(mainbox, "en_unit");
-//    Evas_Object *en_value = evas_object_data_get(mainbox, "en_value");
-//    Evas_Object *en_factor = evas_object_data_get(mainbox, "en_factor");
+   Evas_Object *check_bell = evas_object_data_get(mainbox, "check_bell");
 	ci_name = elm_object_text_get(en_name);
+   ci_bell = elm_check_state_get(check_bell);
 // 	ci_unit = elm_object_text_get(en_unit);
 // 	ci_value = atof(elm_object_text_get(en_value));
 // 	ci_factor = atof(elm_object_text_get(en_factor));
@@ -81,6 +82,7 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 			list_data->g = ci_g;
 			list_data->b = ci_b;
 			list_data->a = ci_a;
+			list_data->bell = ci_bell;
 			found = 1;
 			}
    }
@@ -96,6 +98,7 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 		list_data1->g = ci_g;
 		list_data1->b = ci_b;
 		list_data1->a = ci_a;
+		list_data1->bell = ci_bell;
 
 		configlist = eina_list_append(configlist, list_data1);
 	}
@@ -155,7 +158,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 {	
 	Evas_Object *en_name, *en_unit, *en_value, *en_factor, *popup, *fr, *cs;
    Evas_Object *o, *mainbox, *box_settings;
-   Evas_Object *check_popup;
+   Evas_Object *check_bell;
 	
 	Evas_Object *ly = obj;
 	Evas_Object *win = data;
@@ -189,7 +192,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 	cs = elm_colorselector_add(box_settings);
    evas_object_size_hint_weight_set(cs, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(cs, EVAS_HINT_FILL, EVAS_HINT_FILL);
-    
+
 	elm_colorselector_mode_set(cs, ELM_COLORSELECTOR_BOTH);
 	elm_colorselector_palette_name_set(cs, "countdown");
 	elm_colorselector_palette_color_add(cs, 253, 232, 82, 255);
@@ -214,6 +217,21 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    elm_box_pack_end(box_settings, cs);
    evas_object_show(cs);
 	evas_object_data_set(mainbox, "cs", cs);
+
+	o = elm_separator_add(box_settings);
+   elm_separator_horizontal_set(o, EINA_TRUE);
+   elm_box_pack_end(box_settings, o);
+   evas_object_show(o);
+	
+	check_bell = elm_check_add(box_settings);
+	elm_object_text_set(check_bell, "Disable Audiobell");
+   elm_check_state_set(check_bell, ci_bell);
+   E_ALIGN(check_bell, 0.0, 0.0);
+ 	E_WEIGHT(check_bell, EVAS_HINT_EXPAND, 0);
+//    evas_object_smart_callback_add(check_bell, "changed", _check_changed, inst);
+	elm_box_pack_end(box_settings, check_bell);
+	evas_object_show(check_bell);
+   evas_object_data_set(mainbox, "check_bell", check_bell);	
 	
 	o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
@@ -255,10 +273,10 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    elm_box_pack_end(box_settings, o);
    evas_object_show(o);
 	*/
-	
+/*	
    en_value = elm_entry_add(box_settings);
 //    elm_config_context_menu_disabled_set(EINA_TRUE);
-/*	
+
 	char buf1[4096];
    snprintf(buf1, sizeof(buf1), "%.2f", ci_value);
 	

@@ -15,7 +15,7 @@ static    Ecore_Timer *timer_over = NULL;
 	int min;
 	int hour1;
 	int hour;
-	
+
 	int hour_new, min_new, sec_new;
 	
 typedef struct {
@@ -33,6 +33,7 @@ typedef struct {
 	     int         g;
         int         b;
         int         a;
+		  Eina_Bool   bell;
 } My_Conf_Type;
    
 
@@ -68,6 +69,7 @@ _my_conf_descriptor_init(void)
     MY_CONF_SUB_ADD_BASIC(g, EET_T_INT);
     MY_CONF_SUB_ADD_BASIC(b, EET_T_INT);
     MY_CONF_SUB_ADD_BASIC(a, EET_T_INT);
+    MY_CONF_SUB_ADD_BASIC(bell, EET_T_UCHAR);
 
     // And add the sub descriptor as a linked list at 'subs' in the main struct
     EET_DATA_DESCRIPTOR_ADD_LIST
@@ -298,7 +300,8 @@ _alarm_timer(void *data)
    Evas_Object *edje_obj = elm_layout_edje_get(data);
 	edje_object_part_text_set(edje_obj, "name", "finished");
 	
-	edje_object_signal_emit(edje_obj, "bell_ring", "bell_ring");
+	if(ci_bell == 0)
+	   edje_object_signal_emit(edje_obj, "bell_ring", "bell_ring");
 	
 	hour1 = 0;
 	hour = 0;
