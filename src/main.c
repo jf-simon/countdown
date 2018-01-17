@@ -273,6 +273,8 @@ _alarm_over(void *data)
    Evas_Object *edje_obj = elm_layout_edje_get(data);
 	char buf[64];
 		
+
+	
 	if(sec_new == 59)
 		sec_new = 0;
 	else
@@ -283,11 +285,15 @@ _alarm_over(void *data)
 	
 // 	if(min_new == 0)
 // 		hour_new++;
-		
+	if((sec_new == 0) && (ci_bell == 0))
+	   edje_object_signal_emit(edje_obj, "bell_ring", "bell_ring");
+	
    snprintf(buf, sizeof(buf), "-%02i:%02i:%02i", hour_new, min_new, sec_new);
 
    edje_object_part_text_set(edje_obj, "unit", buf);
-   printf("SEC: %i\n", sec_new);
+   printf("SEC OVER: %i\n", sec_new);
+	
+
 	
    return ECORE_CALLBACK_RENEW;
 }
@@ -466,6 +472,14 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 }
 
 
+void
+my_fl_6(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED)
+{
+   Evas_Object *fl = data;
+   elm_flip_go(fl, ELM_FLIP_CUBE_RIGHT);
+}
+
+
 int elm_main(int argc, char *argv[])
 {
    char buf[PATH_MAX];
@@ -501,33 +515,41 @@ int elm_main(int argc, char *argv[])
    ly = elm_layout_add(win);		  
    snprintf(buf, sizeof(buf), "%s/themes/countdown.edj", PACKAGE_DATA_DIR);
 	evas_object_size_hint_weight_set(ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	
-
    elm_win_resize_object_add(win, ly);
    evas_object_show(ly);
     // LAYOUT CREATE END// 
 
    evas_object_data_set(win, "config", config);
 	evas_object_resize(win, 50, 50);
-	
+
 //     elm_win_resize_object_add(win, ly);
    evas_object_show(win);
 	elm_layout_file_set(ly, buf, "countdown");
 	
+	
+	
+	
+	
+	
+	
    edje_object_signal_callback_add(ly, "settings", "settings", _settings_2, win);
-
-	
-	
 	
 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
-	
 // 	evas_object_smart_callback_add(win, "gadget_site_orient", orient_change, ly);
 //    evas_object_smart_callback_add(win, "gadget_site_anchor", anchor_change, ly);
    evas_object_smart_callback_add(win, "gadget_configure", _settings_1, edje_obj);
 	ecore_event_handler_add(ECORE_EVENT_SIGNAL_USER, _gadget_exit, NULL);
 	
     evas_object_event_callback_add(win, EVAS_CALLBACK_KEY_DOWN, key_down, ly);
-	
+	 
+	 ////
+	 
+	Evas_Object *en1 = elm_entry_add(win);
+    elm_entry_line_wrap_set(en1, ELM_WRAP_WORD);
+   
+    elm_object_text_set(en1, "");
+    elm_object_part_content_set(ly, "name1", en1);
+	///
 	_config_load(ly);
 	
 	set_color(edje_obj);

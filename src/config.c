@@ -105,8 +105,9 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 
 
 	printf("SAVE FOUND: %i\n", found);
-_save_eet();
-_set_content(ly, NULL, NULL, NULL);
+	
+   edje_object_part_text_set(ly, "name", ci_name);
+   _save_eet();
 }
 
 /*

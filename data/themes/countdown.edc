@@ -58,6 +58,19 @@ collections {
 					}
 				}
          part { 
+            name: "name1";
+            type : SWALLOW;
+            scale: 1;
+            description {
+               state: "default" 0.0;
+//                rel1.relative: 0.05 0.09;
+//                rel2.relative: 0.95 0.3;
+//                align: 0.0 0.5;
+               visible: 0;
+               color: 255 255 255 255;
+					}
+				}
+         part { 
             name: "time";
             type : TEXT;
             scale: 1;
