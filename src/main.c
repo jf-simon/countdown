@@ -337,6 +337,21 @@ _alarm_timer(void *data)
    return ECORE_CALLBACK_CANCEL;
 }
 
+void key_down1(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_info)
+{
+//    Evas_Object *edje_obj = elm_layout_edje_get(data);
+
+   Evas_Event_Key_Down *ev = event_info;
+//    Eina_Bool ctrl = evas_key_modifier_is_set(ev->modifiers, "Control");
+   const char *k = ev->keyname;
+	
+	if(!strcmp(k, "s"))
+   {
+	my_fl_6(data, NULL, NULL);
+	printf("FLIP\n");
+	}
+}
+
 
 void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_info)
 {
@@ -347,11 +362,29 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    const char *k = ev->keyname;
 	
 	
-   if(!strcmp(k, "1") || !strcmp(k, "2") || !strcmp(k, "3") || !strcmp(k, "4") || !strcmp(k, "5") || !strcmp(k, "6") || !strcmp(k, "7") || !strcmp(k, "8") || !strcmp(k, "9") || !strcmp(k, "0"))
+   if(!strcmp(k, "1") || !strcmp(k, "2") || !strcmp(k, "3") || !strcmp(k, "4") || !strcmp(k, "5") || !strcmp(k, "6") || !strcmp(k, "7") || !strcmp(k, "8") || !strcmp(k, "9") || !strcmp(k, "0") ||
+		!strcmp(k, "KP_Insert") || !strcmp(k, "KP_End") || !strcmp(k, "KP_Down") || !strcmp(k, "KP_Next") || !strcmp(k, "KP_Left") || !strcmp(k, "KP_Begin") || !strcmp(k, "KP_Right") || !strcmp(k, "KP_Home") || !strcmp(k, "KP_Up") || !strcmp(k, "KP_Prior"))
    {
 		if(timer_all != NULL || timer_over != NULL )
 			return;
+	
+		const char *key;
 		
+   if(!strcmp(k, "1") || !strcmp(k, "2") || !strcmp(k, "3") || !strcmp(k, "4") || !strcmp(k, "5") || !strcmp(k, "6") || !strcmp(k, "7") || !strcmp(k, "8") || !strcmp(k, "9") || !strcmp(k, "0"))
+       key = k;
+	
+	if(!strcmp(k, "KP_Insert")) key = "0";
+	if(!strcmp(k, "KP_End")) key = "1";
+	if(!strcmp(k, "KP_Down")) key = "2";
+	if(!strcmp(k, "KP_Next")) key = "3";
+	if(!strcmp(k, "KP_Left")) key = "4";
+	if(!strcmp(k, "KP_Begin")) key = "5";
+	if(!strcmp(k, "KP_Right")) key = "6";
+	if(!strcmp(k, "KP_Home")) key = "7";
+	if(!strcmp(k, "KP_Up")) key = "8";
+	if(!strcmp(k, "KP_Prior")) key = "9";
+		
+
       edje_object_part_text_set(edje_obj, "name", "Countdown");
 		
 		char buf[64];
@@ -361,7 +394,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		min1 = min;
 		min = sec1;
 		sec1 = sec;
-		sec = atoi(k);
+		sec = atoi(key);
 				
 		snprintf(buf, sizeof(buf), "%i%i:%i%i:%i%i", hour1, hour, min1, min, sec1, sec);
 				
@@ -409,8 +442,23 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
       edje_object_part_text_set(edje_obj, "name", ci_name);
    }
 
-
-   if(!strcmp(k, "BackSpace") || !strcmp(k, "Delete") || !strcmp(k, "Escape"))
+   if(!strcmp(k, "BackSpace"))
+   {
+		char buf[64];
+		
+		sec = sec1;
+		sec1 = min;
+		min = min1;
+		min1 = hour;
+		hour = hour1;
+   	hour1 = 0;
+		
+		snprintf(buf, sizeof(buf), "%i%i:%i%i:%i%i", hour1, hour, min1, min, sec1, sec);
+	   edje_object_part_text_set(edje_obj, "time", buf);
+	}
+		
+		
+   if(!strcmp(k, "Delete") || !strcmp(k, "Escape"))
    {
 		hour1 = 0;
 		hour = 0;
@@ -487,8 +535,8 @@ int elm_main(int argc, char *argv[])
 //    int gadget = 0;
    char buf1[16];
 	
-	Config_Item *config;
-	config = calloc(1, sizeof(Config_Item));
+// 	Config_Item *config;
+// 	config = calloc(1, sizeof(Config_Item));
 		
 		
 	elm_policy_set(ELM_POLICY_QUIT, ELM_POLICY_QUIT_LAST_WINDOW_CLOSED);
@@ -516,21 +564,58 @@ int elm_main(int argc, char *argv[])
    snprintf(buf, sizeof(buf), "%s/themes/countdown.edj", PACKAGE_DATA_DIR);
 	evas_object_size_hint_weight_set(ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    elm_win_resize_object_add(win, ly);
-   evas_object_show(ly);
     // LAYOUT CREATE END// 
 
-   evas_object_data_set(win, "config", config);
+//    evas_object_data_set(win, "config", config);
 	evas_object_resize(win, 50, 50);
 
 //     elm_win_resize_object_add(win, ly);
-   evas_object_show(win);
 	elm_layout_file_set(ly, buf, "countdown");
 	
+   evas_object_show(ly);
+/*	
+	///////////////////////////////////////////////////////////////////////////////////////////7
+   // LAYOUT CREATE START// 
+   Evas_Object *ly1 = elm_layout_add(win);		  
+   snprintf(buf, sizeof(buf), "%s/themes/countdown.edj", PACKAGE_DATA_DIR);
+	evas_object_size_hint_weight_set(ly1, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   elm_win_resize_object_add(win, ly1);
+    // LAYOUT CREATE END// 
+
+//    evas_object_data_set(win, "config", config);
+	evas_object_resize(win, 50, 50);
+
+//     elm_win_resize_object_add(win, ly);
+	elm_layout_file_set(ly1, buf, "countdown");
+	
+	/////////
+
+
+	Evas_Object *fl = elm_flip_add(win);
+   evas_object_size_hint_align_set(fl, EVAS_HINT_FILL, EVAS_HINT_FILL);
+   evas_object_size_hint_weight_set(fl, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+
+   evas_object_show(fl);
+	
+//    evas_object_data_set(win, "fl", fl);
+	
+   elm_object_part_content_set(fl, "front", ly);
+   evas_object_show(ly);
+
+   elm_object_part_content_set(fl, "back", ly1);
+   evas_object_show(ly1);
 	
 	
 	
+//    evas_object_show(ly);
 	
 	
+	*/
+	
+	///////////////////////////////////////////////////////////////////////////////////////////7
+	
+	
+   evas_object_show(win);
 	
    edje_object_signal_callback_add(ly, "settings", "settings", _settings_2, win);
 	
@@ -541,6 +626,7 @@ int elm_main(int argc, char *argv[])
 	ecore_event_handler_add(ECORE_EVENT_SIGNAL_USER, _gadget_exit, NULL);
 	
     evas_object_event_callback_add(win, EVAS_CALLBACK_KEY_DOWN, key_down, ly);
+//     evas_object_event_callback_add(win, EVAS_CALLBACK_KEY_DOWN, key_down1, fl);
 	 
 	 ////
 	 
