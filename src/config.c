@@ -22,6 +22,7 @@ _config_load(void *data)
 			ci_b = list_data->b;
 			ci_a = list_data->a;
 			ci_bell = list_data->bell;
+// 			min_new = list_data->min_new;
 			found = 1;
 		}
    }
@@ -37,9 +38,10 @@ _config_load(void *data)
 		ci_b = 14;
 		ci_a = 255;
 		ci_bell = 0;
+// 		min_new = 0;
 	}
 
-	printf("LOAD FOUND: %i\n", found);
+// 	printf("MIN_NEW: %i\n", ci_min_new);
 }
 
 
@@ -83,6 +85,7 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 			list_data->b = ci_b;
 			list_data->a = ci_a;
 			list_data->bell = ci_bell;
+// 			list_data->min_new = min_new;
 			found = 1;
 			}
    }
@@ -99,6 +102,7 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 		list_data1->b = ci_b;
 		list_data1->a = ci_a;
 		list_data1->bell = ci_bell;
+// 		list_data1->min_new = min_new;
 
 		configlist = eina_list_append(configlist, list_data1);
 	}
@@ -157,7 +161,7 @@ _settings_2(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, cons
 void
 _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 {	
-	Evas_Object *en_name, *popup, *fr, *cs;
+	Evas_Object *en_name, *popup, *fr, *cs, *lbl;
    Evas_Object *o, *mainbox, *box_settings;
    Evas_Object *check_bell;
 	
@@ -249,24 +253,28 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 	evas_object_show(en_name);
    evas_object_data_set(mainbox, "en_name", en_name);
 
-/*
 	o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
    elm_box_pack_end(box_settings, o);
    evas_object_show(o);
-	*/
-/*
-   en_unit = elm_entry_add(box_settings);
-//    elm_config_context_menu_disabled_set(EINA_TRUE);
-   elm_object_text_set(en_unit, ci_unit);
-   elm_entry_editable_set(en_unit, EINA_TRUE);
-   elm_entry_single_line_set(en_unit, EINA_TRUE);
-   evas_object_size_hint_weight_set(en_unit, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-   evas_object_size_hint_align_set(en_unit, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	elm_box_pack_end(box_settings, en_unit);
-	evas_object_show(en_unit);
-   evas_object_data_set(mainbox, "en_unit", en_unit);	
-   */
+
+   lbl = elm_label_add(box_settings);
+   elm_object_text_set(lbl, "<custom align=left>"
+									"- TYPE to set the time<br>"
+									"- ENTER to start countdown<br>"
+									"- BACKSPACE to delete time<br>"
+									"- ESC/DEL to clear time values<br>"
+									"- SPACE to pause/resume countdown<br>"
+									"<br>"
+									"- MOUSE WHEEL on \"hour:min:sec\" sets time<br>"
+									"- KLICK an \"name\" to start countdown<br>"
+									"</custom>");
+   evas_object_size_hint_weight_set(lbl, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   evas_object_size_hint_align_set(lbl, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	elm_box_pack_end(box_settings, lbl);
+	evas_object_show(lbl);
+   evas_object_data_set(mainbox, "lbl", lbl);	
+
 /*
 	o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
