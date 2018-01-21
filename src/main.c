@@ -722,6 +722,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    	   hour1 = 0;
 		
 		   snprintf(buf, sizeof(buf), "%i%i:%i%i:%i%i", hour1, hour, min1, min, sec1, sec);
+			edje_object_part_text_set(edje_obj, "name", "Countdown");
 	      edje_object_part_text_set(edje_obj, "time", buf);
 			
 		}else
