@@ -12,6 +12,7 @@ edje_cmd = join_paths(edje.get_pkgconfig_variable('prefix'),
 cmd = [ edje_cmd,
         '-id', join_paths(meson.source_root(), 'data' , 'themes'),
         '-sd', join_paths(meson.source_root(), 'data' , 'themes' , 'sounds'),
+        '-fd', join_paths(meson.source_root(), 'data' , 'themes' , 'fonts'),
         '@INPUT@', '@OUTPUT@'
       ]
 src = 'countdown'
@@ -27,4 +28,8 @@ meson.add_install_script('perms.sh')
 
 install_data('sounds/bell.wav',
               install_dir: join_paths(dir_data, proj, 'sounds')
+             )
+             
+install_data('fonts/VeraMono.ttf',
+              install_dir: join_paths(dir_data, proj, 'fonts')
              )

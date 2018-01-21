@@ -35,14 +35,15 @@ Evas_Object *ly;
 
 int         ci_id;
 const char *ci_name;
-// const char *ci_unit;
-// // double      ci_value;
 double      ci_factor;
 int         ci_r;
 int         ci_g;
 int         ci_b;
 int         ci_a;
 Eina_Bool   ci_bell;
+// int         ci_min_new;
+
+int hour_new, min_new, sec_new;
 
 Eina_List *configlist;
 
@@ -50,13 +51,11 @@ Eina_List *configlist;
 typedef struct {
         int         id;
         const char *name;
-//         const char *unit;
-// 		  double      value;
-// 		  double      factor;
 		  int         r;
 	     int         g;
         int         b;
         int         a;
 		  Eina_Bool   bell;
+// 		  int         min_new;
 } Config_Item;
 
