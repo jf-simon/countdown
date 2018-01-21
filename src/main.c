@@ -539,6 +539,36 @@ void key_down1(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, vo
 
 
 void
+_pause_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
+{
+      Evas_Object *edje_obj = elm_layout_edje_get(data);
+		
+      if(timer_all == NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
+			return;
+		
+		if(timer_all && ecore_timer_freeze_get(timer_all))
+		{
+		   ecore_timer_thaw(timer_all);
+			edje_object_part_text_set(edje_obj, "name", ci_name);
+		}
+		else
+		{
+		   ecore_timer_freeze(timer_all);
+         edje_object_part_text_set(edje_obj, "name", "paused");
+		}
+		
+		if(timer_sec && ecore_timer_freeze_get(timer_sec))
+		{
+		   ecore_timer_thaw(timer_sec);
+		}
+		else
+		{
+		   ecore_timer_freeze(timer_sec);
+		}
+}
+	
+
+void
 _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
    Evas_Object *edje_obj = elm_layout_edje_get(data);
@@ -546,6 +576,11 @@ _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 		if(timer_all != NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
 			return;
 		
+// 		if(timer_all != NULL || strcmp(elm_object_part_text_get(ly, "time"), "Countdown"))
+// 		{
+// 			_pause_countdown(data, NULL, NULL, NULL);
+// 			return;
+// 		}
 		
 		hour_new = hour1*10 + hour;
 		min_new = min1*10 + min;
@@ -723,28 +758,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    
    if(!strcmp(k, "space"))
    {
-		if(!strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
-			return;
-		
-		if(timer_all && ecore_timer_freeze_get(timer_all))
-		{
-		   ecore_timer_thaw(timer_all);
-			edje_object_part_text_set(edje_obj, "name", "");
-		}
-		else
-		{
-		   ecore_timer_freeze(timer_all);
-         edje_object_part_text_set(edje_obj, "name", "paused");
-		}
-		
-		if(timer_sec && ecore_timer_freeze_get(timer_sec))
-		{
-		   ecore_timer_thaw(timer_sec);
-		}
-		else
-		{
-		   ecore_timer_freeze(timer_sec);
-		}
+		_pause_countdown(data, NULL, NULL, NULL);
    }
    
    
