@@ -248,7 +248,7 @@ set_color(Evas_Object *ly)
 void
 _hour_increase(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-	if(timer_stopwatch != NULL)
+	if(timer_stopwatch != NULL || timer_all != NULL)
 		return;
 	
 	if(hour < 9 && hour1 < 9)
@@ -271,7 +271,7 @@ _hour_increase(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, c
 void
 _hour_decrease(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-	if(timer_stopwatch != NULL)
+	if(timer_stopwatch != NULL || timer_all != NULL)
 		return;
 	
 	if(hour > 0)
@@ -298,7 +298,7 @@ _hour_decrease(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, c
 void
 _min_increase(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-	if(timer_stopwatch != NULL)
+	if(timer_stopwatch != NULL || timer_all != NULL)
 		return;
 	
 	if(min < 9 && min1 < 9)
@@ -321,7 +321,7 @@ _min_increase(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, co
 void
 _min_decrease(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-	if(timer_stopwatch != NULL)
+	if(timer_stopwatch != NULL || timer_all != NULL)
 		return;
 	
 	if(min > 0)
@@ -346,7 +346,7 @@ _min_decrease(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, co
 void
 _sec_increase(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-	if(timer_stopwatch != NULL)
+	if(timer_stopwatch != NULL || timer_all != NULL)
 		return;
 	
 	if(sec < 9 && sec1 < 9)
@@ -369,7 +369,7 @@ _sec_increase(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, co
 void
 _sec_decrease(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-	if(timer_stopwatch != NULL)
+	if(timer_stopwatch != NULL || timer_all != NULL)
 		return;
 		
 	if(sec > 0)
