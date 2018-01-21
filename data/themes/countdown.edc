@@ -43,26 +43,6 @@ collections {
 					}
 				}
          part { 
-            name: "name";
-            type : TEXT;
-            scale: 1;
-//             entry_mode: PLAIN;
-            description {
-               state: "default" 0.0;
-               rel1.relative: 0.05 0.09;
-               rel2.relative: 0.95 0.3;
-               align: 0.0 0.5;
-               visible: 1;
-               color: 255 255 255 255;
-               text{
-               text: "Countdown";
-               size: 10;
-               fit: 0 1;
-//                ellipsis: 1.0;
-               }
-					}
-				}
-         part { 
             name: "name1";
             type : SWALLOW;
             scale: 1;
@@ -153,6 +133,26 @@ collections {
                color: 255 255 255 0;
 					}
 				}
+         part { 
+            name: "name";
+            type : TEXT;
+            scale: 1;
+//             entry_mode: PLAIN;
+            description {
+               state: "default" 0.0;
+               rel1.relative: 0.05 0.09;
+               rel2.relative: 0.95 0.3;
+               align: 0.0 0.5;
+               visible: 1;
+               color: 255 255 255 255;
+               text{
+               text: "Countdown";
+               size: 10;
+               fit: 0 1;
+//                ellipsis: 1.0;
+               }
+					}
+				}
       }
 		programs {
          program {
@@ -166,6 +166,12 @@ collections {
             signal: "mouse,down,3";
             source: "*";
             action: SIGNAL_EMIT "settings" "settings";
+         }
+         program {
+            name: "click_start";
+            signal: "mouse,down,1";
+            source: "name";
+            action: SIGNAL_EMIT "start" "countdown";
          }
          program {
             name: "hour_mouse_d";

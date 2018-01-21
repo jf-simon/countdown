@@ -538,6 +538,47 @@ void key_down1(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, vo
 }
 
 
+void
+_start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
+{
+   Evas_Object *edje_obj = elm_layout_edje_get(data);
+		
+		if(timer_all != NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
+			return;
+		
+		
+		hour_new = hour1*10 + hour;
+		min_new = min1*10 + min;
+		sec_new = sec1*10 + sec;
+
+		double isec = fmod(sec_new, 60);
+		
+		if(isec == sec_new)
+			printf(" ");
+		else
+		{
+			min_new++;
+			sec_new = isec;
+		}
+			
+		double imin = fmod(min_new, 60);
+		
+		if(imin == min_new)
+			printf(" ");
+		else
+		{
+			hour_new++;
+			min_new = imin;
+		}
+      double countdown_time = (((hour1*10) + hour)*3600) + (((min1*10) + min)*60) + (((sec1*10) + sec));
+		
+	   timer_sec = ecore_timer_add(1.0, _sec_timer, ly);
+	   timer_all = ecore_timer_add(countdown_time, _alarm_timer, ly);
+
+      edje_object_part_text_set(edje_obj, "name", ci_name);
+}
+
+
 void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_info)
 {
    Evas_Object *edje_obj = elm_layout_edje_get(data);
@@ -588,8 +629,8 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		
    if(!strcmp(k, "Return") || !strcmp(k, "KP_Enter"))
    {
-// 		char time_buf[64];
-		
+		_start_countdown(data, NULL, NULL, NULL);
+/*		
 		if(timer_all != NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
 			return;
 		
@@ -598,7 +639,6 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		min_new = min1*10 + min;
 		sec_new = sec1*10 + sec;
 
-// 		int buf = 0;
 		double isec = fmod(sec_new, 60);
 		
 		if(isec == sec_new)
@@ -624,6 +664,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 	   timer_all = ecore_timer_add(countdown_time, _alarm_timer, ly);
 
       edje_object_part_text_set(edje_obj, "name", ci_name);
+*/
    }
 /*
    if(!strcmp(k, "BackSpace"))
@@ -831,6 +872,8 @@ int elm_main(int argc, char *argv[])
    edje_object_signal_callback_add(ly, "min", "min_increase", _min_increase, NULL);
    edje_object_signal_callback_add(ly, "sec", "sec_decrease", _sec_decrease, NULL);
    edje_object_signal_callback_add(ly, "sec", "sec_increase", _sec_increase, NULL);
+	
+   edje_object_signal_callback_add(ly, "start", "countdown", _start_countdown, ly);
 	
 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
 // 	evas_object_smart_callback_add(win, "gadget_site_orient", orient_change, ly);
