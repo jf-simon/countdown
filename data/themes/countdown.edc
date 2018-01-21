@@ -5,6 +5,11 @@ images {
    image: "module_icon_world_black.png" COMP;
 }
 
+fonts
+{
+   font: "VeraMono.ttf" "VeraMono";
+}
+
 color_classes {
     color_class {
        name: "colorclass";
@@ -87,10 +92,11 @@ collections {
                align: 0.5 0.5;
                visible: 1;
                color: 255 255 255 255;
-               text.size: 15;
+               text.size: 8;
                text.fit: 1 0;
+//                text.font: "VeraMono";
                text.ellipsis: -1.0;
-               text.text: "0";
+//                text.text: "0";
 					}
 				}
          part { 
@@ -106,12 +112,49 @@ collections {
                color: 255 255 255 255;
 //                text.text: "00:00:00";
                text.size: 8;
-               text.fit: 1 0;
+               text.fit: 1 1;
 //                text.align: 0.5 0.2;
                text.ellipsis: -1.0;
 					}
 				}
-      programs {
+         part { 
+            name: "left";
+            type : RECT;
+            scale: 1;
+            description {
+               state: "default" 0.0;
+               rel1.relative: 0.0 0.0;
+               rel2.relative: 0.33 1.0;
+               visible: 1;
+               color: 255 255 255 0;
+					}
+				}
+         part { 
+            name: "middle";
+            type : RECT;
+            scale: 1;
+            description {
+               state: "default" 0.0;
+               rel1.relative: 0.33 0.0;
+               rel2.relative: 0.66 1.0;
+               visible: 1;
+               color: 255 255 255 0;
+					}
+				}
+         part { 
+            name: "right";
+            type : RECT;
+            scale: 1;
+            description {
+               state: "default" 0.0;
+               rel1.relative: 0.66 0.0;
+               rel2.relative: 1.0 1.0;
+               visible: 1;
+               color: 255 255 255 0;
+					}
+				}
+      }
+		programs {
          program {
             name: "play_sound";
             signal: "bell_ring"; 
@@ -124,6 +167,41 @@ collections {
             source: "*";
             action: SIGNAL_EMIT "settings" "settings";
          }
-      }
+         program {
+            name: "hour_mouse_d";
+            signal: "mouse,wheel,0,1";
+            source: "left";
+            action: SIGNAL_EMIT "hour" "hour_decrease";
+         }
+         program {
+            name: "hour_mouse_i";
+            signal: "mouse,wheel,0,-1";
+            source: "left";
+            action: SIGNAL_EMIT "hour" "hour_increase";
+         }
+         program {
+            name: "min_mouse_d";
+            signal: "mouse,wheel,0,1";
+            source: "middle";
+            action: SIGNAL_EMIT "min" "min_decrease";
+         }
+         program {
+            name: "min_mouse_i";
+            signal: "mouse,wheel,0,-1";
+            source: "middle";
+            action: SIGNAL_EMIT "min" "min_increase";
+         }
+         program {
+            name: "sec_mouse_d";
+            signal: "mouse,wheel,0,1";
+            source: "right";
+            action: SIGNAL_EMIT "sec" "sec_decrease";
+         }
+         program {
+            name: "sec_mouse_i";
+            signal: "mouse,wheel,0,-1";
+            source: "right";
+            action: SIGNAL_EMIT "sec" "sec_increase";
+         }
       }
 }
