@@ -41,6 +41,7 @@ int         ci_g;
 int         ci_b;
 int         ci_a;
 Eina_Bool   ci_bell;
+Eina_Bool   ci_vbell;
 // int         ci_min_new;
 
 int hour_new, min_new, sec_new;
@@ -56,6 +57,7 @@ typedef struct {
         int         b;
         int         a;
 		  Eina_Bool   bell;
+		  Eina_Bool   vbell;
 // 		  int         min_new;
 } Config_Item;
 

@@ -3,6 +3,8 @@
 void
 _config_load(void *data)
 {
+   Evas_Object *edje_obj = elm_layout_edje_get(data);
+	
    int found = 0;
 	Eina_List *l;
 	Config_Item *list_data;
@@ -22,6 +24,7 @@ _config_load(void *data)
 			ci_b = list_data->b;
 			ci_a = list_data->a;
 			ci_bell = list_data->bell;
+			ci_vbell = list_data->vbell;
 // 			min_new = list_data->min_new;
 			found = 1;
 		}
@@ -38,10 +41,13 @@ _config_load(void *data)
 		ci_b = 14;
 		ci_a = 255;
 		ci_bell = 0;
+		ci_vbell = 0;
 // 		min_new = 0;
 	}
 
-// 	printf("MIN_NEW: %i\n", ci_min_new);
+   edje_object_part_text_set(edje_obj, "name", ci_name);
+	
+	printf("LOAD\n");
 }
 
 
@@ -64,8 +70,10 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 // 	{
    Evas_Object *en_name = evas_object_data_get(mainbox, "en_name");
    Evas_Object *check_bell = evas_object_data_get(mainbox, "check_bell");
+   Evas_Object *check_vbell = evas_object_data_get(mainbox, "check_vbell");
 	ci_name = elm_object_text_get(en_name);
    ci_bell = elm_check_state_get(check_bell);
+   ci_vbell = elm_check_state_get(check_vbell);
 // 	ci_unit = elm_object_text_get(en_unit);
 // 	ci_value = atof(elm_object_text_get(en_value));
 // 	ci_factor = atof(elm_object_text_get(en_factor));
@@ -85,6 +93,7 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 			list_data->b = ci_b;
 			list_data->a = ci_a;
 			list_data->bell = ci_bell;
+			list_data->vbell = ci_vbell;
 // 			list_data->min_new = min_new;
 			found = 1;
 			}
@@ -102,6 +111,7 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 		list_data1->b = ci_b;
 		list_data1->a = ci_a;
 		list_data1->bell = ci_bell;
+		list_data1->vbell = ci_vbell;
 // 		list_data1->min_new = min_new;
 
 		configlist = eina_list_append(configlist, list_data1);
@@ -163,7 +173,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 {	
 	Evas_Object *en_name, *popup, *fr, *cs, *lbl;
    Evas_Object *o, *mainbox, *box_settings;
-   Evas_Object *check_bell;
+   Evas_Object *check_bell, *check_vbell;
 	
 	Evas_Object *ly = obj;
 	Evas_Object *win = data;
@@ -236,6 +246,20 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 	elm_box_pack_end(box_settings, check_bell);
 	evas_object_show(check_bell);
    evas_object_data_set(mainbox, "check_bell", check_bell);	
+	
+	o = elm_separator_add(box_settings);
+   elm_separator_horizontal_set(o, EINA_TRUE);
+   elm_box_pack_end(box_settings, o);
+   evas_object_show(o);
+	
+	check_vbell = elm_check_add(box_settings);
+	elm_object_text_set(check_vbell, "Disable Visualbell");
+   elm_check_state_set(check_vbell, ci_vbell);
+   E_ALIGN(check_vbell, 0.0, 0.0);
+ 	E_WEIGHT(check_vbell, EVAS_HINT_EXPAND, 0);
+	elm_box_pack_end(box_settings, check_vbell);
+	evas_object_show(check_vbell);
+   evas_object_data_set(mainbox, "check_vbell", check_vbell);	
 	
 	o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);

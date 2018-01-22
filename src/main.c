@@ -32,6 +32,7 @@ typedef struct {
         int         b;
         int         a;
 		  Eina_Bool   bell;
+		  Eina_Bool   vbell;
 // 		  int			  min_new;
 } My_Conf_Type;
    
@@ -69,6 +70,7 @@ _my_conf_descriptor_init(void)
     MY_CONF_SUB_ADD_BASIC(b, EET_T_INT);
     MY_CONF_SUB_ADD_BASIC(a, EET_T_INT);
     MY_CONF_SUB_ADD_BASIC(bell, EET_T_UCHAR);
+    MY_CONF_SUB_ADD_BASIC(vbell, EET_T_UCHAR);
 //     MY_CONF_SUB_ADD_BASIC(min_new, EET_T_INT);
 
     // And add the sub descriptor as a linked list at 'subs' in the main struct
@@ -450,7 +452,8 @@ _alarm_over(void *data)
    edje_object_part_text_set(edje_obj, "unit", buf);
    printf("SEC OVER: %i\n", sec_new);
 	
-
+	if(!ci_vbell)
+		edje_object_signal_emit(edje_obj, "pulse", "pulse");
 	
    return ECORE_CALLBACK_RENEW;
 }
