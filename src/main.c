@@ -573,14 +573,14 @@ _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 {
    Evas_Object *edje_obj = elm_layout_edje_get(data);
 		
-		if(timer_all != NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
+		if(timer_all != NULL && !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
 			return;
 		
-// 		if(timer_all != NULL || strcmp(elm_object_part_text_get(ly, "time"), "Countdown"))
-// 		{
-// 			_pause_countdown(data, NULL, NULL, NULL);
-// 			return;
-// 		}
+		if(timer_all != NULL && strcmp(elm_object_part_text_get(ly, "name"), "Countdown"))
+		{
+			_pause_countdown(data, NULL, NULL, NULL);
+			return;
+		}
 		
 		hour_new = hour1*10 + hour;
 		min_new = min1*10 + min;
