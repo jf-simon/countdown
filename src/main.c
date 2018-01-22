@@ -452,7 +452,7 @@ _alarm_over(void *data)
    edje_object_part_text_set(edje_obj, "unit", buf);
    printf("SEC OVER: %i\n", sec_new);
 	
-	if(!ci_vbell)
+	if(!ci_vbell && fmod(sec_new, 2) == 0)
 		edje_object_signal_emit(edje_obj, "pulse", "pulse");
 	
    return ECORE_CALLBACK_RENEW;
