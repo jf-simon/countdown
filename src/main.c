@@ -674,49 +674,8 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    if(!strcmp(k, "Return") || !strcmp(k, "KP_Enter"))
    {
 		_start_countdown(data, NULL, NULL, NULL);
-/*		
-		if(timer_all != NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
-			return;
-		
-		
-		hour_new = hour1*10 + hour;
-		min_new = min1*10 + min;
-		sec_new = sec1*10 + sec;
-
-		double isec = fmod(sec_new, 60);
-		
-		if(isec == sec_new)
-			printf(" ");
-		else
-		{
-			min_new++;
-			sec_new = isec;
-		}
-			
-		double imin = fmod(min_new, 60);
-		
-		if(imin == min_new)
-			printf(" ");
-		else
-		{
-			hour_new++;
-			min_new = imin;
-		}
-      double countdown_time = (((hour1*10) + hour)*3600) + (((min1*10) + min)*60) + (((sec1*10) + sec));
-		
-	   timer_sec = ecore_timer_add(1.0, _sec_timer, ly);
-	   timer_all = ecore_timer_add(countdown_time, _alarm_timer, ly);
-
-      edje_object_part_text_set(edje_obj, "name", ci_name);
-*/
    }
-/*
-   if(!strcmp(k, "BackSpace"))
-   {		
 
-	}
-		*/
-		
    if(!strcmp(k, "Delete") || !strcmp(k, "Escape") || !strcmp(k, "BackSpace"))
    {		
 		if(timer_stopwatch == NULL && timer_all == NULL && timer_over == NULL && !strcmp(k, "BackSpace"))
