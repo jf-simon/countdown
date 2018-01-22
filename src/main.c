@@ -486,7 +486,6 @@ _stopwatch_run(void *data)
    snprintf(buf, sizeof(buf), "%02i:%02i:%02i:%02i", hour_new, min_new, sec_new, mil_sec);
 
    edje_object_part_text_set(edje_obj, "time", buf);
-//    printf("Stopwatch: %i\n", sec_new);
 	
    return ECORE_CALLBACK_RENEW;
 }
@@ -495,10 +494,13 @@ _stopwatch_run(void *data)
 static Eina_Bool
 _alarm_timer(void *data)
 {
-// 	const char buf[64];
+	char buf[64];
 
+   snprintf(buf, sizeof(buf), "%s done", ci_name);
+	
    Evas_Object *edje_obj = elm_layout_edje_get(data);
-	edje_object_part_text_set(edje_obj, "name", "finished");
+	
+	edje_object_part_text_set(edje_obj, "name", buf);
 	
 	if(ci_bell == 0)
 	   edje_object_signal_emit(edje_obj, "bell_ring", "bell_ring");
@@ -541,7 +543,9 @@ void key_down1(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, vo
 void
 _pause_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-      Evas_Object *edje_obj = elm_layout_edje_get(data);
+		char buf[64];
+
+		Evas_Object *edje_obj = elm_layout_edje_get(data);
 		
       if(timer_all == NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
 			return;
@@ -554,7 +558,9 @@ _pause_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 		else
 		{
 		   ecore_timer_freeze(timer_all);
-         edje_object_part_text_set(edje_obj, "name", "paused");
+			
+			snprintf(buf, sizeof(buf), "%s paused", ci_name);
+         edje_object_part_text_set(edje_obj, "name", buf);
 		}
 		
 		if(timer_sec && ecore_timer_freeze_get(timer_sec))
@@ -645,7 +651,10 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		else if(!strcmp(k, "KP_Prior")) key = "9";
 		
 
-      edje_object_part_text_set(edje_obj, "name", "Countdown");
+		if(!strcmp(ci_name, ""))
+		   edje_object_part_text_set(edje_obj, "name", "Countdown");
+		else
+			edje_object_part_text_set(edje_obj, "name", ci_name);
 		
 		char buf[64];
 
@@ -722,14 +731,21 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    	   hour1 = 0;
 		
 		   snprintf(buf, sizeof(buf), "%i%i:%i%i:%i%i", hour1, hour, min1, min, sec1, sec);
-			edje_object_part_text_set(edje_obj, "name", "Countdown");
-	      edje_object_part_text_set(edje_obj, "time", buf);
+			
+			if(!strcmp(ci_name, ""))
+			   edje_object_part_text_set(edje_obj, "name", "Countdown");
+			else
+				edje_object_part_text_set(edje_obj, "name", ci_name);
 			
 		}else
 		{		
 			_values_to_zero();
 			
-			edje_object_part_text_set(edje_obj, "name", "Countdown");
+			if(!strcmp(ci_name, ""))
+			   edje_object_part_text_set(edje_obj, "name", "Countdown");
+			else
+				edje_object_part_text_set(edje_obj, "name", ci_name);
+			
 			edje_object_part_text_set(edje_obj, "time", "00:00:00");
 			edje_object_part_text_set(edje_obj, "unit", "");
 
@@ -753,6 +769,11 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 			{
 				ecore_timer_del(timer_stopwatch);
 				timer_stopwatch = NULL;
+			}
+			if (timer_over)
+			{
+				ecore_timer_del(timer_over);
+				timer_over = NULL;
 			}
 		}
    }
