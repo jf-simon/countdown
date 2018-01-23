@@ -3,3 +3,5 @@ Type=Application
 Name=Countdown
 Exec=@GADGET_DIR@/countdown
 Icon=error
+X-Gadget-Version=@VERSION@
+X-Gadget-Bugreport=https://www.enlightenment.org/contrib/report-bug

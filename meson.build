@@ -67,6 +67,7 @@ configure_file(output: 'config.h', configuration: cfg)
 
 desktop_data = configuration_data()
         desktop_data.set('GADGET_DIR', install_dir)
+        desktop_data.set('VERSION', meson.project_version())
 
 configure_file(input: 'countdown.desktop.in',
         output: 'countdown.desktop',
