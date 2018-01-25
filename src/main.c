@@ -152,13 +152,14 @@ _save_eet()
     eet_shutdown();
 	 
 }
-/*
+
+
 static void
 _my_conf_descriptor_shutdown(void)
 {
     eet_data_descriptor_free(_my_conf_sub_descriptor);
     eet_data_descriptor_free(_my_conf_descriptor);
-}*/
+}
 
 
 static Eina_Bool 
@@ -618,13 +619,10 @@ _pause_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 		}
 }
 	
-	
 
 void
 _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-//    Evas_Object *edje_obj = elm_layout_edje_get(data);
-		
 		if(timer_all != NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
 			return;
 		
@@ -644,9 +642,9 @@ _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 			
 		double imin = fmod(min_new, 60);
 		
-		if(imin == min_new)
-			printf(" ");
-		else
+		if(imin != min_new)
+// 			printf(" ");
+// 		else
 		{
 			hour_new++;
 			min_new = imin;
@@ -659,10 +657,32 @@ _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
       edje_object_part_text_set(data, "name", ci_name);
 }
 
+
+static void
+_toogle_stopwatch(Evas_Object *edje_obj)
+{
+		if(timer_stopwatch)
+		{
+		   ecore_timer_del(timer_stopwatch);
+			timer_stopwatch = NULL;
+         edje_object_part_text_set(edje_obj, "time", "00:00:00:000");
+
+			_values_to_zero();
+		}
+		else
+		{
+			timer_stopwatch = ecore_timer_add(0.01, _stopwatch_run, ly);
+         edje_object_part_text_set(edje_obj, "name", "Stopwatch");
+		}
+}
 void
 _toogle_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
+	
    Evas_Object *edje_obj = elm_layout_edje_get(data);
+	
+	if(timer_stopwatch != NULL || !strcmp(elm_object_part_text_get(data, "name"), "Stopwatch"))
+		return;
 	
 	if(timer_all == NULL && strcmp(elm_object_part_text_get(data, "time"), "00:00:00"))
 		_start_countdown(edje_obj, NULL, NULL, NULL);
@@ -765,19 +785,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    
    if(!strcmp(k, "s"))
    {
-		if(timer_stopwatch)
-		{
-		   ecore_timer_del(timer_stopwatch);
-			timer_stopwatch = NULL;
-         edje_object_part_text_set(edje_obj, "time", "00:00:00:000");
-
-			_values_to_zero();
-		}
-		else
-		{
-			timer_stopwatch = ecore_timer_add(0.01, _stopwatch_run, ly);
-         edje_object_part_text_set(edje_obj, "name", "Stopwatch");
-		}
+		_toogle_stopwatch(edje_obj);
    }
    printf("KEY: %s\n", k);
 }
