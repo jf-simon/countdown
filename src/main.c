@@ -17,7 +17,8 @@ static    Ecore_Timer *timer_stopwatch = NULL;
 	int min;
 	int hour1;
 	int hour;
-
+	
+	Eina_Bool ctrl = NULL;
 	
 typedef struct {
         Eina_List   *configlist_eet;
@@ -219,6 +220,42 @@ _values_to_zero()
 	sec_new = 0;
 }
 
+static void
+_cancel_countdown(Evas_Object *edje_obj)
+{
+			_values_to_zero();
+			
+			if(!strcmp(ci_name, ""))
+			   edje_object_part_text_set(edje_obj, "name", "Countdown");
+			else
+				edje_object_part_text_set(edje_obj, "name", ci_name);
+			
+			edje_object_part_text_set(edje_obj, "time", "00:00:00");
+			edje_object_part_text_set(edje_obj, "unit", "");
+
+					
+			if (timer_all)
+			{
+				ecore_timer_del(timer_all);
+				timer_all = NULL;
+			}
+			if (timer_sec)
+			{
+				ecore_timer_del(timer_sec);
+				timer_sec = NULL;
+			}
+			if (timer_over)
+			{
+				ecore_timer_del(timer_over);
+				timer_over = NULL;
+			}
+			if (timer_stopwatch)
+			{
+				ecore_timer_del(timer_stopwatch);
+				timer_stopwatch = NULL;
+			}
+}
+
 void
 _set_content(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
@@ -252,6 +289,11 @@ _hour_increase(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, c
 {
 	if(timer_stopwatch != NULL || timer_all != NULL)
 		return;
+	
+	if(ctrl)
+	{
+		printf("CTRL\n");
+	}
 	
 	if(hour < 9 && hour1 < 9)
 	{
@@ -532,7 +574,7 @@ void key_down1(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, vo
 //    Evas_Object *edje_obj = elm_layout_edje_get(data);
 
    Evas_Event_Key_Down *ev = event_info;
-//    Eina_Bool ctrl = evas_key_modifier_is_set(ev->modifiers, "Control");
+   ctrl = evas_key_modifier_is_set(ev->modifiers, "Control");
    const char *k = ev->keyname;
 	
 	if(!strcmp(k, "s"))
@@ -576,20 +618,15 @@ _pause_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 		}
 }
 	
+	
 
 void
 _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-   Evas_Object *edje_obj = elm_layout_edje_get(data);
+//    Evas_Object *edje_obj = elm_layout_edje_get(data);
 		
 		if(timer_all != NULL || !strcmp(elm_object_part_text_get(ly, "time"), "00:00:00"))
 			return;
-		
-// 		if(timer_all != NULL && strcmp(elm_object_part_text_get(ly, "name"), "Countdown"))
-// 		{
-// 			_pause_countdown(data, NULL, NULL, NULL);
-// 			return;
-// 		}
 		
 		hour_new = hour1*10 + hour;
 		min_new = min1*10 + min;
@@ -619,7 +656,18 @@ _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 	   timer_sec = ecore_timer_add(1.0, _sec_timer, ly);
 	   timer_all = ecore_timer_add(countdown_time, _alarm_timer, ly);
 
-      edje_object_part_text_set(edje_obj, "name", ci_name);
+      edje_object_part_text_set(data, "name", ci_name);
+}
+
+void
+_toogle_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
+{
+   Evas_Object *edje_obj = elm_layout_edje_get(data);
+	
+	if(timer_all == NULL && strcmp(elm_object_part_text_get(data, "time"), "00:00:00"))
+		_start_countdown(edje_obj, NULL, NULL, NULL);
+	else
+		_cancel_countdown(edje_obj);
 }
 
 
@@ -628,7 +676,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    Evas_Object *edje_obj = elm_layout_edje_get(data);
 
    Evas_Event_Key_Down *ev = event_info;
-//    Eina_Bool ctrl = evas_key_modifier_is_set(ev->modifiers, "Control");
+   ctrl = evas_key_modifier_is_set(ev->modifiers, "Control");
    const char *k = ev->keyname;
 	
 	
@@ -676,11 +724,14 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		
    if(!strcmp(k, "Return") || !strcmp(k, "KP_Enter"))
    {
-		_start_countdown(data, NULL, NULL, NULL);
+		_start_countdown(edje_obj, NULL, NULL, NULL);
    }
 
+   
    if(!strcmp(k, "Delete") || !strcmp(k, "Escape") || !strcmp(k, "BackSpace"))
    {		
+		
+		
 		if(timer_stopwatch == NULL && timer_all == NULL && timer_over == NULL && !strcmp(k, "BackSpace"))
 		{		
 		   char buf[64];
@@ -693,6 +744,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    	   hour1 = 0;
 		
 		   snprintf(buf, sizeof(buf), "%i%i:%i%i:%i%i", hour1, hour, min1, min, sec1, sec);
+			edje_object_part_text_set(edje_obj, "time", buf);
 			
 			if(!strcmp(ci_name, ""))
 			   edje_object_part_text_set(edje_obj, "name", "Countdown");
@@ -701,42 +753,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 			
 		}else
 		{		
-			_values_to_zero();
-			
-			if(!strcmp(ci_name, ""))
-			   edje_object_part_text_set(edje_obj, "name", "Countdown");
-			else
-				edje_object_part_text_set(edje_obj, "name", ci_name);
-			
-			edje_object_part_text_set(edje_obj, "time", "00:00:00");
-			edje_object_part_text_set(edje_obj, "unit", "");
-
-					
-			if (timer_all)
-			{
-				ecore_timer_del(timer_all);
-				timer_all = NULL;
-			}
-			if (timer_sec)
-			{
-				ecore_timer_del(timer_sec);
-				timer_sec = NULL;
-			}
-			if (timer_over)
-			{
-				ecore_timer_del(timer_over);
-				timer_over = NULL;
-			}
-			if (timer_stopwatch)
-			{
-				ecore_timer_del(timer_stopwatch);
-				timer_stopwatch = NULL;
-			}
-			if (timer_over)
-			{
-				ecore_timer_del(timer_over);
-				timer_over = NULL;
-			}
+		   _cancel_countdown(edje_obj);
 		}
    }
    
@@ -871,7 +888,7 @@ int elm_main(int argc, char *argv[])
    edje_object_signal_callback_add(ly, "sec", "sec_decrease", _sec_decrease, NULL);
    edje_object_signal_callback_add(ly, "sec", "sec_increase", _sec_increase, NULL);
 	
-   edje_object_signal_callback_add(ly, "start", "countdown", _start_countdown, ly);
+   edje_object_signal_callback_add(ly, "start", "countdown", _toogle_countdown, ly);
 	
 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
 // 	evas_object_smart_callback_add(win, "gadget_site_orient", orient_change, ly);
@@ -903,7 +920,7 @@ int elm_main(int argc, char *argv[])
   elm_run();
 
   //shutdown!
-//         _my_conf_descriptor_shutdown();
+  _my_conf_descriptor_shutdown();
   return 0;
 }
 
