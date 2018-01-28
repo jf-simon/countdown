@@ -540,13 +540,7 @@ _stopwatch_run(void *data)
 static Eina_Bool
 _alarm_timer(void *data)
 {
-	char buf[64];
-
-   snprintf(buf, sizeof(buf), "%s done", ci_name);
-	
    Evas_Object *edje_obj = elm_layout_edje_get(data);
-	
-	edje_object_part_text_set(edje_obj, "name", buf);
 	
 	if(ci_bell == 0)
 	   edje_object_signal_emit(edje_obj, "bell_ring", "bell_ring");
