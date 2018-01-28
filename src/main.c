@@ -715,7 +715,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
    if(!strcmp(k, "1") || !strcmp(k, "2") || !strcmp(k, "3") || !strcmp(k, "4") || !strcmp(k, "5") || !strcmp(k, "6") || !strcmp(k, "7") || !strcmp(k, "8") || !strcmp(k, "9") || !strcmp(k, "0") ||
 		!strcmp(k, "KP_Insert") || !strcmp(k, "KP_End") || !strcmp(k, "KP_Down") || !strcmp(k, "KP_Next") || !strcmp(k, "KP_Left") || !strcmp(k, "KP_Begin") || !strcmp(k, "KP_Right") || !strcmp(k, "KP_Home") || !strcmp(k, "KP_Up") || !strcmp(k, "KP_Prior"))
    {
-		if(timer_all != NULL || timer_over != NULL )
+		if(timer_all != NULL || timer_over != NULL || timer_stopwatch != NULL)
 			return;
 	
 		const char *key;
@@ -756,7 +756,8 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		
    if(!strcmp(k, "Return") || !strcmp(k, "KP_Enter"))
    {
-		_start_countdown(edje_obj, NULL, NULL, NULL);
+		 if(timer_stopwatch == NULL)
+			_start_countdown(edje_obj, NULL, NULL, NULL);
    }
 
 
@@ -797,6 +798,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 
    if(!strcmp(k, "s"))
    {
+		if(timer_all == NULL && timer_over == NULL )
 		_toogle_stopwatch(edje_obj);
    }
    printf("KEY: %s\n", k);
