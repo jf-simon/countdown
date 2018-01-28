@@ -171,8 +171,8 @@ _settings_2(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, cons
 void
 _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 {	
-	Evas_Object *en_name, *popup, *fr, *cs, *lbl;
-   Evas_Object *o, *mainbox, *box_settings;
+	Evas_Object *en_name, *popup, *fr, *cs, *lbl, *fr_help;
+   Evas_Object *o, *mainbox, *box_settings, *box_name;
    Evas_Object *check_bell, *check_vbell;
 	
 	Evas_Object *ly = obj;
@@ -204,6 +204,72 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    E_EXPAND(box_settings);
    evas_object_show(box_settings);
 	
+
+		   box_name = elm_box_add(box_settings);
+			elm_box_horizontal_set(box_name, EINA_TRUE);
+			E_EXPAND(box_name);
+			E_ALIGN(box_name, 0.0, 0.5);
+			evas_object_show(box_name);
+			
+			lbl = elm_label_add(box_name);
+			elm_object_text_set(lbl, "Name: ");
+			evas_object_size_hint_weight_set(lbl, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+			evas_object_size_hint_align_set(lbl, EVAS_HINT_FILL, EVAS_HINT_FILL);
+			elm_box_pack_end(box_name, lbl);
+			evas_object_show(lbl);
+			evas_object_data_set(mainbox, "lbl", lbl);
+			
+			en_name = elm_entry_add(box_name);
+			elm_config_context_menu_disabled_set(EINA_TRUE);
+			elm_object_text_set(en_name, ci_name);
+			elm_entry_editable_set(en_name, EINA_TRUE);
+			elm_entry_single_line_set(en_name, EINA_TRUE);
+			evas_object_size_hint_weight_set(en_name, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+			evas_object_size_hint_align_set(en_name, EVAS_HINT_FILL, EVAS_HINT_FILL);
+			elm_box_pack_end(box_name, en_name);
+			evas_object_show(en_name);
+			evas_object_data_set(mainbox, "en_name", en_name);
+			
+			
+			elm_box_pack_end(box_settings, box_name);
+	
+
+
+	o = elm_separator_add(box_settings);
+   elm_separator_horizontal_set(o, EINA_TRUE);
+   elm_box_pack_end(box_settings, o);
+   evas_object_show(o);
+
+	check_bell = elm_check_add(box_settings);
+	elm_object_text_set(check_bell, "Disable Audiobell");
+   elm_check_state_set(check_bell, ci_bell);
+   E_ALIGN(check_bell, 0.0, 0.0);
+ 	E_WEIGHT(check_bell, EVAS_HINT_EXPAND, 0);
+	elm_box_pack_end(box_settings, check_bell);
+	evas_object_show(check_bell);
+   evas_object_data_set(mainbox, "check_bell", check_bell);	
+
+	
+	o = elm_separator_add(box_settings);
+   elm_separator_horizontal_set(o, EINA_TRUE);
+   elm_box_pack_end(box_settings, o);
+   evas_object_show(o);
+	
+	check_vbell = elm_check_add(box_settings);
+	elm_object_text_set(check_vbell, "Disable Visualbell");
+   elm_check_state_set(check_vbell, ci_vbell);
+   E_ALIGN(check_vbell, 0.0, 0.0);
+ 	E_WEIGHT(check_vbell, EVAS_HINT_EXPAND, 0);
+	elm_box_pack_end(box_settings, check_vbell);
+	evas_object_show(check_vbell);
+   evas_object_data_set(mainbox, "check_vbell", check_vbell);	
+	
+	
+	o = elm_separator_add(box_settings);
+   elm_separator_horizontal_set(o, EINA_TRUE);
+   elm_box_pack_end(box_settings, o);
+   evas_object_show(o);
+	
 	cs = elm_colorselector_add(box_settings);
    evas_object_size_hint_weight_set(cs, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(cs, EVAS_HINT_FILL, EVAS_HINT_FILL);
@@ -227,60 +293,32 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    elm_colorselector_palette_color_add(cs, 63, 37, 60, 255);
    elm_colorselector_palette_color_add(cs, 115, 87, 63, 255);
    elm_colorselector_palette_color_add(cs, 66, 70, 73, 255);
-   elm_colorselector_palette_color_add(cs, 255, 255, 255, 255);
    elm_colorselector_palette_color_add(cs, 0, 0, 0, 255);
    elm_box_pack_end(box_settings, cs);
    evas_object_show(cs);
 	evas_object_data_set(mainbox, "cs", cs);
 
-	o = elm_separator_add(box_settings);
-   elm_separator_horizontal_set(o, EINA_TRUE);
-   elm_box_pack_end(box_settings, o);
-   evas_object_show(o);
 	
-	check_bell = elm_check_add(box_settings);
-	elm_object_text_set(check_bell, "Disable Audiobell");
-   elm_check_state_set(check_bell, ci_bell);
-   E_ALIGN(check_bell, 0.0, 0.0);
- 	E_WEIGHT(check_bell, EVAS_HINT_EXPAND, 0);
-	elm_box_pack_end(box_settings, check_bell);
-	evas_object_show(check_bell);
-   evas_object_data_set(mainbox, "check_bell", check_bell);	
-	
-	o = elm_separator_add(box_settings);
-   elm_separator_horizontal_set(o, EINA_TRUE);
-   elm_box_pack_end(box_settings, o);
-   evas_object_show(o);
-	
-	check_vbell = elm_check_add(box_settings);
-	elm_object_text_set(check_vbell, "Disable Visualbell");
-   elm_check_state_set(check_vbell, ci_vbell);
-   E_ALIGN(check_vbell, 0.0, 0.0);
- 	E_WEIGHT(check_vbell, EVAS_HINT_EXPAND, 0);
-	elm_box_pack_end(box_settings, check_vbell);
-	evas_object_show(check_vbell);
-   evas_object_data_set(mainbox, "check_vbell", check_vbell);	
-	
-	o = elm_separator_add(box_settings);
-   elm_separator_horizontal_set(o, EINA_TRUE);
-   elm_box_pack_end(box_settings, o);
-   evas_object_show(o);
+// 	o = elm_separator_add(box_settings);
+//    elm_separator_horizontal_set(o, EINA_TRUE);
+//    elm_box_pack_end(box_settings, o);
+//    evas_object_show(o);
 
-   en_name = elm_entry_add(box_settings);
-   elm_config_context_menu_disabled_set(EINA_TRUE);
-   elm_object_text_set(en_name, ci_name);
-   elm_entry_editable_set(en_name, EINA_TRUE);
-   elm_entry_single_line_set(en_name, EINA_TRUE);
-   evas_object_size_hint_weight_set(en_name, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-   evas_object_size_hint_align_set(en_name, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	elm_box_pack_end(box_settings, en_name);
-	evas_object_show(en_name);
-   evas_object_data_set(mainbox, "en_name", en_name);
+   elm_object_content_set(fr, box_settings);
+   elm_box_pack_end(mainbox, fr);
 
-	o = elm_separator_add(box_settings);
-   elm_separator_horizontal_set(o, EINA_TRUE);
-   elm_box_pack_end(box_settings, o);
-   evas_object_show(o);
+   fr_help = elm_frame_add(mainbox);
+   elm_object_text_set(fr_help, "Help");
+   E_EXPAND(fr_help);
+   E_ALIGN(fr_help, 0.5, 0.5);
+   E_FILL(fr_help);
+   evas_object_show(fr_help);
+
+   box_settings = elm_box_add(fr_help);
+   elm_box_horizontal_set(box_settings, EINA_FALSE);
+   E_EXPAND(box_settings);
+   evas_object_show(box_settings);
+	
 
    lbl = elm_label_add(box_settings);
    elm_object_text_set(lbl, "<custom align=left>"
@@ -300,48 +338,6 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 	evas_object_show(lbl);
    evas_object_data_set(mainbox, "lbl", lbl);	
 
-/*
-	o = elm_separator_add(box_settings);
-   elm_separator_horizontal_set(o, EINA_TRUE);
-   elm_box_pack_end(box_settings, o);
-   evas_object_show(o);
-	*/
-/*	
-   en_value = elm_entry_add(box_settings);
-//    elm_config_context_menu_disabled_set(EINA_TRUE);
-
-	char buf1[4096];
-   snprintf(buf1, sizeof(buf1), "%.2f", ci_value);
-	
-   elm_object_text_set(en_value, buf1);
-   elm_entry_editable_set(en_value, EINA_TRUE);
-   elm_entry_single_line_set(en_value, EINA_TRUE);
-   evas_object_size_hint_weight_set(en_value, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-   evas_object_size_hint_align_set(en_value, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	elm_box_pack_end(box_settings, en_value);
-	evas_object_show(en_value);
-   evas_object_data_set(mainbox, "en_value", en_value);	
-*/
-/*
-	o = elm_separator_add(box_settings);
-   elm_separator_horizontal_set(o, EINA_TRUE);
-   elm_box_pack_end(box_settings, o);
-   evas_object_show(o);
-*/
-/*	
-   en_factor = elm_entry_add(box_settings);
-//    elm_config_context_menu_disabled_set(EINA_TRUE);
-	
-   snprintf(buf1, sizeof(buf1), "%.2f", ci_factor);
-	
-   elm_object_text_set(en_factor, buf1);
-   elm_entry_editable_set(en_factor, EINA_TRUE);
-   elm_entry_single_line_set(en_factor, EINA_TRUE);
-   evas_object_size_hint_weight_set(en_factor, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-   evas_object_size_hint_align_set(en_factor, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	elm_box_pack_end(box_settings, en_factor);
-	evas_object_show(en_factor);
-   evas_object_data_set(mainbox, "en_factor", en_factor);*/
 
    o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
@@ -349,10 +345,8 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    evas_object_show(o);
 
 
-   elm_object_content_set(fr, box_settings);
-   elm_box_pack_end(mainbox, fr);
-
-
+   elm_object_content_set(fr_help, box_settings);
+   elm_box_pack_end(mainbox, fr_help);
 	
 //    evas_object_smart_callback_add(check_online, "changed", _check_bibelserver_changed, hoversel);
 //    evas_object_smart_callback_add(check_switch, "changed", _check_switch_changed, sl_switch_time);
