@@ -10,15 +10,15 @@ static    Ecore_Timer *timer_over = NULL;
 static    Ecore_Timer *timer_stopwatch = NULL;
 // static E_Gadget_Site_Orient gorient;
 // static E_Gadget_Site_Anchor ganchor;
-   int mil_sec;
-   int sec1;
-	int sec;
-	int min1;
-	int min;
-	int hour1;
-	int hour;
+int mil_sec;
+int sec1;
+int sec;
+int min1;
+int min;
+int hour1;
+int hour;
 	
-	Eina_Bool ctrl = NULL;
+Eina_Bool ctrl;
 	
 typedef struct {
         Eina_List   *configlist_eet;
@@ -675,6 +675,8 @@ _toogle_stopwatch(Evas_Object *edje_obj)
          edje_object_part_text_set(edje_obj, "name", "Stopwatch");
 		}
 }
+
+
 void
 _toogle_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
@@ -689,6 +691,22 @@ _toogle_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission
 	else
 		_cancel_countdown(edje_obj);
 }
+
+/*
+void
+_stop_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
+{
+	
+   Evas_Object *edje_obj = elm_layout_edje_get(data);
+	
+	if(timer_stopwatch != NULL || !strcmp(elm_object_part_text_get(data, "name"), "Stopwatch"))
+		return;
+	
+	if(timer_all == NULL && strcmp(elm_object_part_text_get(data, "time"), "00:00:00"))
+// 		_start_countdown(edje_obj, NULL, NULL, NULL);
+	else
+		_cancel_countdown(edje_obj);
+}*/
 
 
 void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_info)
@@ -747,10 +765,9 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		_start_countdown(edje_obj, NULL, NULL, NULL);
    }
 
-   
+
    if(!strcmp(k, "Delete") || !strcmp(k, "Escape") || !strcmp(k, "BackSpace"))
-   {		
-		
+   {
 		
 		if(timer_stopwatch == NULL && timer_all == NULL && timer_over == NULL && !strcmp(k, "BackSpace"))
 		{		
@@ -776,13 +793,14 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		   _cancel_countdown(edje_obj);
 		}
    }
-   
+
+
    if(!strcmp(k, "space"))
    {
 		_pause_countdown(data, NULL, NULL, NULL);
    }
-   
-   
+
+
    if(!strcmp(k, "s"))
    {
 		_toogle_stopwatch(edje_obj);
@@ -897,6 +915,7 @@ int elm_main(int argc, char *argv[])
    edje_object_signal_callback_add(ly, "sec", "sec_increase", _sec_increase, NULL);
 	
    edje_object_signal_callback_add(ly, "start", "countdown", _toogle_countdown, ly);
+//    edje_object_signal_callback_add(ly, "stop", "countdown", _toogle_countdown, ly);
 	
 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
 // 	evas_object_smart_callback_add(win, "gadget_site_orient", orient_change, ly);

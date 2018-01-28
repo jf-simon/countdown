@@ -51,7 +51,7 @@ collections {
                color: 255 255 255 255;
 					}
 				}
-         part {  
+         part {
             name: "time";
             type : TEXT;
             scale: 1;
@@ -64,7 +64,7 @@ collections {
                align: 0.5 0.5;
                visible: 1;
                color: 255 255 255 255;
-               text.size: 8;
+               text.size: 14;
                text.fit: 1 0;
                text.ellipsis: -1.0;
 					}
@@ -81,7 +81,7 @@ collections {
                text.ellipsis: -1.0;
 					}
 				}
-         part { 
+         part {
             name: "unit";
             type : TEXT;
             scale: 1;
@@ -96,7 +96,7 @@ collections {
                text.ellipsis: -1.0;
 					}
 				}
-         part { 
+         part {
             name: "left";
             type : RECT;
             scale: 1;
@@ -108,7 +108,7 @@ collections {
                color: 255 255 255 0;
 					}
 				}
-         part { 
+         part {
             name: "middle";
             type : RECT;
             scale: 1;
@@ -120,7 +120,7 @@ collections {
                color: 255 255 255 0;
 					}
 				}
-         part { 
+         part {
             name: "right";
             type : RECT;
             scale: 1;
@@ -132,7 +132,7 @@ collections {
                color: 255 255 255 0;
 					}
 				}
-         part { 
+         part {
             name: "name";
             type : TEXT;
             scale: 1;
@@ -168,6 +168,12 @@ collections {
             signal: "mouse,down,1";
             source: "name";
             action: SIGNAL_EMIT "start" "countdown";
+         }
+         program {
+            name: "click_stop";
+            signal: "mouse,down,1";
+            source: "*";
+            action: SIGNAL_EMIT "stop" "countdown";
          }
          program {
             name: "hour_mouse_d";
