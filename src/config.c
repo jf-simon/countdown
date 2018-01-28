@@ -284,6 +284,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 
    lbl = elm_label_add(box_settings);
    elm_object_text_set(lbl, "<custom align=left>"
+									"- CLICK into gadget to activate it<br>"
 									"- TYPE to set the time<br>"
 									"- ENTER to start countdown<br>"
 									"- BACKSPACE to delete time<br>"
