@@ -75,7 +75,7 @@ collections {
 					rel.to: "background";
                align: 0.5 0.5;
                visible: 1;
-               color: 255 255 255 64;
+               color: 255 255 255 255;
                text.size: 8;
                text.fit: 1 0;
                text.ellipsis: -1.0;
