@@ -41,7 +41,7 @@ _config_load(void *data)
 		ci_b = 14;
 		ci_a = 255;
 		ci_bell = 0;
-		ci_vbell = 0;
+		ci_vbell = 1;
 // 		min_new = 0;
 	}
 
@@ -229,7 +229,6 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 			elm_box_pack_end(box_name, en_name);
 			evas_object_show(en_name);
 			evas_object_data_set(mainbox, "en_name", en_name);
-			
 			
 			elm_box_pack_end(box_settings, box_name);
 	
