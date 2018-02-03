@@ -40,8 +40,8 @@ _config_load(void *data)
 		ci_g = 13;
 		ci_b = 14;
 		ci_a = 255;
-		ci_bell = 0;
-		ci_vbell = 1;
+		ci_bell = 1;
+		ci_vbell = 0;
 // 		min_new = 0;
 	}
 
@@ -193,7 +193,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 	
 	
    fr = elm_frame_add(mainbox);
-   elm_object_text_set(fr, "Counter Settings");
+   elm_object_text_set(fr, "Countdown Settings");
    E_EXPAND(fr);
    E_ALIGN(fr, 0.5, 0.5);
    E_FILL(fr);
