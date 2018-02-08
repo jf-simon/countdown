@@ -1,6 +1,10 @@
 inc = include_directories('.', '../..', '../')
 
-e = dependency('enlightenment')
+dep_e = dependency('enlightenment')
+deps = [
+        dep_e,
+        dependency('elementary')
+]
 
 src = [
   'countdown.h',
@@ -10,8 +14,10 @@ src = [
 
 executable('countdown',
   src,
-  dependencies: e,
+  dependencies: deps,
   install_dir: install_dir,
+  c_args : ['-fPIE', '-fPIC'],
+  link_args : ['-rdynamic', '-pie'],
   install: true,
   include_directories: inc
 )
