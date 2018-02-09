@@ -146,6 +146,13 @@ _colorselector_changed_cb(void *data, Evas_Object *obj, void *event_info EINA_UN
 }
 
 
+static void
+_popup_focus_out(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Evas_Object *obj, void *event_data EINA_UNUSED)
+{
+   evas_object_del(obj);
+}
+
+
 void
 _settings_1(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 {
@@ -203,6 +210,28 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    elm_box_horizontal_set(box_settings, EINA_FALSE);
    E_EXPAND(box_settings);
    evas_object_show(box_settings);
+	
+/*	
+	/////
+		o = elm_separator_add(box_settings);
+   elm_separator_horizontal_set(o, EINA_TRUE);
+   elm_box_pack_end(box_settings, o);
+   evas_object_show(o);
+
+// 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
+	Evas_Object *edje_obj = edje_object_add(box_settings);
+	
+   char buf[PATH_MAX];
+   snprintf(buf, sizeof(buf), "%s/themes/countdown.edj", PACKAGE_DATA_DIR);
+	edje_object_file_set(edje_obj, buf, "countdown");
+   E_ALIGN(edje_obj, 0.5, 0.5);
+ 	E_WEIGHT(edje_obj, EVAS_HINT_EXPAND, 0);
+   E_FILL(edje_obj);
+   evas_object_size_hint_min_set(edje_obj, 100, 100);
+	elm_box_pack_end(box_settings, edje_obj);
+	evas_object_show(edje_obj);
+	*/
+	////
 	
 
 		   box_name = elm_box_add(box_settings);
@@ -369,6 +398,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    elm_object_content_set(popup, mainbox);
 	
 	evas_object_event_callback_add(popup, EVAS_CALLBACK_MOUSE_OUT, _config_save, mainbox);
+	evas_object_event_callback_add(popup, EVAS_CALLBACK_FOCUS_OUT, _popup_focus_out, NULL);
    evas_object_show(popup);
 }
 
