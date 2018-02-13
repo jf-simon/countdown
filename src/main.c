@@ -475,6 +475,8 @@ _alarm_over(void *data)
 	char buf[64];
 		
 
+	if(!ci_vbell && fmod(sec_new, 2) == 0)
+		edje_object_signal_emit(edje_obj, "pulse", "pulse");
 	
 	if(sec_new == 59)
 		sec_new = 0;
@@ -495,8 +497,6 @@ _alarm_over(void *data)
    edje_object_part_text_set(edje_obj, "unit", buf);
    printf("SEC OVER: %i\n", sec_new);
 	
-	if(!ci_vbell && fmod(sec_new, 2) == 0)
-		edje_object_signal_emit(edje_obj, "pulse", "pulse");
 	
    return ECORE_CALLBACK_RENEW;
 }
@@ -817,7 +817,7 @@ int elm_main(int argc, char *argv[])
 {
    char buf[PATH_MAX];
 //    char buf2[PATH_MAX];
-//    int gadget = 0;
+   int gadget = 0;
    char buf1[16];
 	
 // 	Config_Item *config;
@@ -828,7 +828,7 @@ int elm_main(int argc, char *argv[])
  
    if (getenv("E_GADGET_ID"))
      {
-//         gadget = 1;
+        gadget = 1;
         snprintf(buf1, sizeof(buf1), "%s", getenv("E_GADGET_ID"));
         id_num = atoi(buf1);
      }
@@ -855,7 +855,13 @@ int elm_main(int argc, char *argv[])
 	evas_object_resize(win, 50, 50);
 
 //     elm_win_resize_object_add(win, ly);
-	elm_layout_file_set(ly, buf, "countdown");
+	if(gadget == -1)
+	{
+		elm_layout_file_set(ly, buf, "countdown_add");
+		edje_object_part_text_set(ly, "unit", "go on dude");
+	}
+		else	
+	   elm_layout_file_set(ly, buf, "countdown");
 	
    evas_object_show(ly);
 /*	
