@@ -147,7 +147,7 @@ _colorselector_changed_cb(void *data, Evas_Object *obj, void *event_info EINA_UN
 
 
 static void
-_popup_focus_out(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Evas_Object *obj, void *event_data EINA_UNUSED)
+_popup_del(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Evas_Object *obj, void *event_data EINA_UNUSED)
 {
    evas_object_del(obj);
 }
@@ -350,7 +350,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 
    lbl = elm_label_add(box_settings);
    elm_object_text_set(lbl, "<custom align=left>"
-									"- CLICK into gadget to activate it<br>"
+									"CLICK into gadget to activate it<br>"
 									"- TYPE to set the time<br>"
 									"- ENTER to start countdown<br>"
 									"- BACKSPACE to delete time<br>"
@@ -398,7 +398,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    elm_object_content_set(popup, mainbox);
 	
 	evas_object_event_callback_add(popup, EVAS_CALLBACK_MOUSE_OUT, _config_save, mainbox);
-	evas_object_event_callback_add(popup, EVAS_CALLBACK_FOCUS_OUT, _popup_focus_out, NULL);
+	evas_object_event_callback_add(popup, EVAS_CALLBACK_HIDE, _popup_del, NULL);
    evas_object_show(popup);
 }
 
