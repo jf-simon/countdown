@@ -2,6 +2,7 @@
 Type=Application
 Name=Countdown
 Exec=@GADGET_DIR@/countdown
-Icon=error
+Icon=countdown
 X-Gadget-Version=@VERSION@
 X-Gadget-Bugreport=https://www.enlightenment.org/contrib/report-bug
+X-Gadget-Orientations=None
