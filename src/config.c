@@ -16,38 +16,42 @@ _config_load(void *data)
 	   if(list_data->id == id_num)
 		{
 			ci_name = eina_stringshare_add(list_data->name);
-// 			ci_unit = eina_stringshare_add(list_data->unit);
-// 			ci_value = list_data->value;
-// 			ci_factor = list_data->factor;
 			ci_r = list_data->r;
 			ci_g = list_data->g;
 			ci_b = list_data->b;
 			ci_a = list_data->a;
 			ci_bell = list_data->bell;
 			ci_vbell = list_data->vbell;
-// 			min_new = list_data->min_new;
+			hour_new = list_data->hour_new;
+			min_new = list_data->min_new;
+			sec_new = list_data->sec_new;
+			
 			found = 1;
 		}
    }
+   
 
    if(found == 0)
 	{
 		ci_name = eina_stringshare_add("NAME");
-// 		ci_unit = eina_stringshare_add("UNIT");
-// 		ci_value = 0;
-// 		ci_factor= 1;
 		ci_r = 116;
 		ci_g = 13;
 		ci_b = 14;
 		ci_a = 255;
 		ci_bell = 1;
 		ci_vbell = 0;
-// 		min_new = 0;
+		hour_new = 0;
+		min_new = 0;
+		min_new = 0;
 	}
 
    edje_object_part_text_set(edje_obj, "name", ci_name);
 	
-	printf("LOAD\n");
+	printf("NAME LOAD: %s\n", ci_name);
+	printf("NEWNAME LOAD: %s\n", name);
+	printf("LOAD FOUND%i\n", found);
+	printf("LOAD min NEW: %i\n", min_new);
+	printf("LOAD VBELL: %i\n", ci_vbell);
 }
 
 
@@ -64,71 +68,59 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 	
 	Evas_Object *mainbox = data;
    Evas_Object *ly = evas_object_data_get(mainbox, "ly");
-	
-	
-// 	if(data != NULL)
-// 	{
+
+	if(data != NULL)
+	{
    Evas_Object *en_name = evas_object_data_get(mainbox, "en_name");
    Evas_Object *check_bell = evas_object_data_get(mainbox, "check_bell");
    Evas_Object *check_vbell = evas_object_data_get(mainbox, "check_vbell");
 	ci_name = elm_object_text_get(en_name);
    ci_bell = elm_check_state_get(check_bell);
    ci_vbell = elm_check_state_get(check_vbell);
-// 	ci_unit = elm_object_text_get(en_unit);
-// 	ci_value = atof(elm_object_text_get(en_value));
-// 	ci_factor = atof(elm_object_text_get(en_factor));
-// 	}
-// 	
-   EINA_LIST_FOREACH(configlist, l, list_data)
+	}
+
+	EINA_LIST_FOREACH(configlist, l, list_data)
    {
 	   if(list_data->id == id_num)
 		{
 			list_data->name = ci_name;
-// 			list_data->unit = ci_unit;
-// 			list_data->value = atof(elm_object_text_get(en_value));
-// 			list_data->value = ci_value;
-// 			list_data->factor = ci_factor;
 			list_data->r = ci_r;
 			list_data->g = ci_g;
 			list_data->b = ci_b;
 			list_data->a = ci_a;
 			list_data->bell = ci_bell;
 			list_data->vbell = ci_vbell;
-// 			list_data->min_new = min_new;
+			list_data->hour_new = hour_new;
+			list_data->min_new = min_new;
+			list_data->sec_new = sec_new;
 			found = 1;
 			}
    }
-		  
+
 	if(found == 0)
 	{
 		list_data1->id = id_num;
-		list_data1->name = ci_name;
-// 		list_data1->unit = ci_unit;
-// 		list_data1->value = ci_value;
-// 		list_data1->factor = ci_factor;
+		list_data1->name = eina_stringshare_add("Countdown");
 		list_data1->r = ci_r;
 		list_data1->g = ci_g;
 		list_data1->b = ci_b;
 		list_data1->a = ci_a;
-		list_data1->bell = ci_bell;
-		list_data1->vbell = ci_vbell;
-// 		list_data1->min_new = min_new;
+		list_data1->bell = 1;
+		list_data1->vbell = 0;
+		list_data1->hour_new = hour_new;
+		list_data1->min_new = min_new;
+		list_data1->sec_new = sec_new;
 
 		configlist = eina_list_append(configlist, list_data1);
 	}
 
 
-	printf("SAVE FOUND: %i\n", found);
+// 	printf("VBELL SAVE: %i\n", elm_check_state_get(check_vbell));
+	printf("NAME SAVE: %s\n", ci_name);
 	
    edje_object_part_text_set(ly, "name", ci_name);
    _save_eet();
 }
-
-/*
-unsigned int createHEX(int r, int g, int b, int a)
-{
-	return ((r & 0xff) << 24) + ((g & 0xff) << 16) + ((b & 0xff) << 8) + (a & 0xff);
-}*/
 
 
 static void
