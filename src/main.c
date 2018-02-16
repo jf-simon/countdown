@@ -302,7 +302,7 @@ _cancel_countdown(Evas_Object *edje_obj)
 }
 
 void
-_set_content(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
+_resume(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
 	Evas_Object *ly = data;
    char buf[4096];
@@ -955,7 +955,7 @@ int elm_main(int argc, char *argv[])
 	
 	set_color(edje_obj);
 	
-	_set_content(edje_obj, NULL, NULL, NULL);
+	_resume(edje_obj, NULL, NULL, NULL);
 	_save_eet();
   //run app RUN!
   elm_run();
