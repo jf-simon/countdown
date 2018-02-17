@@ -5,4 +5,3 @@ Exec=@GADGET_DIR@/countdown
 Icon=countdown
 X-Gadget-Version=@VERSION@
 X-Gadget-Bugreport=https://www.enlightenment.org/contrib/report-bug
-X-Gadget-Orientations=None
