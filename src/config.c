@@ -9,8 +9,6 @@ _config_load(void *data)
 	Eina_List *l;
 	Config_Item *list_data;
 
-   printf("LIST COUNT %i\n", eina_list_count(configlist));
-
    EINA_LIST_FOREACH(configlist, l, list_data)
    {
 	   if(list_data->id == id_num)
@@ -29,7 +27,6 @@ _config_load(void *data)
 			found = 1;
 		}
    }
-   
 
    if(found == 0)
 	{
@@ -46,12 +43,6 @@ _config_load(void *data)
 	}
 
    edje_object_part_text_set(edje_obj, "name", ci_name);
-	
-	printf("NAME LOAD: %s\n", ci_name);
-	printf("NEWNAME LOAD: %s\n", name);
-	printf("LOAD FOUND%i\n", found);
-	printf("LOAD min NEW: %i\n", min_new);
-	printf("LOAD VBELL: %i\n", ci_vbell);
 }
 
 
@@ -113,10 +104,6 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 
 		configlist = eina_list_append(configlist, list_data1);
 	}
-
-
-// 	printf("VBELL SAVE: %i\n", elm_check_state_get(check_vbell));
-	printf("NAME SAVE: %s\n", ci_name);
 	
    edje_object_part_text_set(ly, "name", ci_name);
    _save_eet();
@@ -150,7 +137,7 @@ _settings_1(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 {
 	Evas_Object *win = obj;
 	Evas_Object *ly = data;
-	printf("SETTINGS1\n");
+	
 	_settings(win, ly, NULL);
 }
 
@@ -161,7 +148,6 @@ _settings_2(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, cons
 	Evas_Object *win = data;
 	Evas_Object *ly = obj;
 	
-	printf("SETTINGS2\n");
 	_settings(win, ly, NULL);
 }
 
@@ -203,29 +189,6 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    E_EXPAND(box_settings);
    evas_object_show(box_settings);
 	
-/*	
-	/////
-		o = elm_separator_add(box_settings);
-   elm_separator_horizontal_set(o, EINA_TRUE);
-   elm_box_pack_end(box_settings, o);
-   evas_object_show(o);
-
-// 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
-	Evas_Object *edje_obj = edje_object_add(box_settings);
-	
-   char buf[PATH_MAX];
-   snprintf(buf, sizeof(buf), "%s/themes/countdown.edj", PACKAGE_DATA_DIR);
-	edje_object_file_set(edje_obj, buf, "countdown");
-   E_ALIGN(edje_obj, 0.5, 0.5);
- 	E_WEIGHT(edje_obj, EVAS_HINT_EXPAND, 0);
-   E_FILL(edje_obj);
-   evas_object_size_hint_min_set(edje_obj, 100, 100);
-	elm_box_pack_end(box_settings, edje_obj);
-	evas_object_show(edje_obj);
-	*/
-	////
-	
-
 		   box_name = elm_box_add(box_settings);
 			elm_box_horizontal_set(box_name, EINA_TRUE);
 			E_EXPAND(box_name);
@@ -253,7 +216,6 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 			
 			elm_box_pack_end(box_settings, box_name);
 	
-
 
 	o = elm_separator_add(box_settings);
    elm_separator_horizontal_set(o, EINA_TRUE);
@@ -318,12 +280,6 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    evas_object_show(cs);
 	evas_object_data_set(mainbox, "cs", cs);
 
-	
-// 	o = elm_separator_add(box_settings);
-//    elm_separator_horizontal_set(o, EINA_TRUE);
-//    elm_box_pack_end(box_settings, o);
-//    evas_object_show(o);
-
    elm_object_content_set(fr, box_settings);
    elm_box_pack_end(mainbox, fr);
 
@@ -368,19 +324,6 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
    elm_object_content_set(fr_help, box_settings);
    elm_box_pack_end(mainbox, fr_help);
 	
-//    evas_object_smart_callback_add(check_online, "changed", _check_bibelserver_changed, hoversel);
-//    evas_object_smart_callback_add(check_switch, "changed", _check_switch_changed, sl_switch_time);
-//    evas_object_smart_callback_add(check_layout, "changed", _check_layout_changed, mainbox);
-//    evas_object_smart_callback_add(sl_font, "changed", _sl_font_changed, mainbox);
-//    evas_object_smart_callback_add(sl_font, "changed", _sl_font_changed_value, ly);
-//    evas_object_smart_callback_add(tg_theme, "changed", _tg_changed_cb, ic);
-//    evas_object_smart_callback_add(tg_theme, "changed", _config_save, mainbox);
-	
-// 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
-//    evas_object_smart_callback_add(en_name, "changed", _config_save, mainbox);
-//    evas_object_smart_callback_add(en_unit, "changed", _config_save, mainbox);
-//    evas_object_smart_callback_add(en_value, "changed", _config_save, mainbox);
-//    evas_object_smart_callback_add(en_factor, "changed", _config_save, mainbox);
 	evas_object_smart_callback_add(cs, "changed", _colorselector_changed_cb, mainbox); 
 	
 
@@ -393,4 +336,3 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 	evas_object_event_callback_add(popup, EVAS_CALLBACK_HIDE, _popup_del, NULL);
    evas_object_show(popup);
 }
-
