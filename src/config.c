@@ -23,7 +23,8 @@ _config_load(void *data)
 			hour_new = list_data->hour_new;
 			min_new = list_data->min_new;
 			sec_new = list_data->sec_new;
-			
+			diff_save = list_data->diff_save;
+			resume = list_data->resume;
 			found = 1;
 		}
    }
@@ -40,6 +41,7 @@ _config_load(void *data)
 		hour_new = 0;
 		min_new = 0;
 		min_new = 0;
+		resume = 0;
 	}
 
    edje_object_part_text_set(edje_obj, "name", ci_name);
@@ -60,6 +62,13 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 	Evas_Object *mainbox = data;
    Evas_Object *ly = evas_object_data_get(mainbox, "ly");
 
+	if(timer_all != NULL)
+		resume = 1;
+	else
+		resume = 0;
+		
+   diff_save = (unsigned long)time(NULL);
+	
 	if(data != NULL)
 	{
    Evas_Object *en_name = evas_object_data_get(mainbox, "en_name");
@@ -84,6 +93,8 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 			list_data->hour_new = hour_new;
 			list_data->min_new = min_new;
 			list_data->sec_new = sec_new;
+			list_data->diff_save = diff_save;
+			list_data->resume = resume;
 			found = 1;
 			}
    }
@@ -101,12 +112,16 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 		list_data1->hour_new = hour_new;
 		list_data1->min_new = min_new;
 		list_data1->sec_new = sec_new;
+		list_data1->diff_save = diff_save;
+		list_data1->resume = resume;
 
 		configlist = eina_list_append(configlist, list_data1);
 	}
 	
    edje_object_part_text_set(ly, "name", ci_name);
-   _save_eet();
+	
+	printf("UNIX TIME %lu\n", (unsigned long)time(NULL));
+	_save_eet();
 }
 
 
@@ -152,18 +167,15 @@ _settings_2(void *data, Evas_Object *obj, const char *emission EINA_UNUSED, cons
 }
 
 
-
 void
 _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 {	
 	Evas_Object *en_name, *popup, *fr, *cs, *lbl, *fr_help;
    Evas_Object *o, *mainbox, *box_settings, *box_name;
    Evas_Object *check_bell, *check_vbell;
-	
+
 	Evas_Object *ly = obj;
 	Evas_Object *win = data;
-//    char buf[PATH_MAX];
-
 		  
    popup = elm_win_add(win, "win", ELM_WIN_BASIC);
    elm_win_alpha_set(popup, 1);

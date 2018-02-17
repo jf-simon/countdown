@@ -4,14 +4,15 @@ Evas_Object *win = NULL;
 // static    Evas_Object *popup = NULL;
 Evas_Object *ly = NULL;
 
-static    Ecore_Timer *timer_all = NULL;
-static    Ecore_Timer *timer_sec = NULL;
-static    Ecore_Timer *timer_over = NULL;
-static    Ecore_Timer *timer_stopwatch = NULL;
+Ecore_Timer *timer_all = NULL;
+Ecore_Timer *timer_sec = NULL;
+Ecore_Timer *timer_over = NULL;
+Ecore_Timer *timer_stopwatch = NULL;
 
 
 void    _toogle_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED);
 void    _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED);
+static Eina_Bool _alarm_over(void *data);
 // static E_Gadget_Site_Orient gorient;
 // static E_Gadget_Site_Anchor ganchor;
 int mil_sec;
@@ -24,6 +25,7 @@ int hour;
 int hour_new = 0;
 int min_new = 0;
 int sec_new = 0;
+unsigned long diff_save = 0;
 
 int over_h = 0, over_m = 0, over_s = 0;
 int stopwatch_msec = 0, stopwatch_sec = 0, stopwatch_min = 0, stopwatch_hour = 0;
@@ -34,7 +36,6 @@ Eina_Bool ctrl;
 	
 typedef struct {
         Eina_List   *configlist_eet;
-//         int name;
 } Counter_List_Eet;
 
 
@@ -50,6 +51,8 @@ typedef struct {
 		  int			  hour_new;
 		  int			  min_new;
 		  int			  sec_new;
+		  unsigned long		  diff_save;
+		  Eina_Bool   resume;
 } My_Conf_Type;
    
 
@@ -87,6 +90,9 @@ _my_conf_descriptor_init(void)
     MY_CONF_SUB_ADD_BASIC(hour_new, EET_T_INT);
     MY_CONF_SUB_ADD_BASIC(min_new, EET_T_INT);
     MY_CONF_SUB_ADD_BASIC(sec_new, EET_T_INT);
+    MY_CONF_SUB_ADD_BASIC(diff_save, EET_T_ULONG_LONG);
+    MY_CONF_SUB_ADD_BASIC(resume, EET_T_UCHAR);
+	 
 	 
 	 
 //     MY_CONF_ADD_BASIC(name, EET_T_STRING);
@@ -307,6 +313,64 @@ _resume(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUS
 	Evas_Object *ly = data;
    char buf[4096];
 	
+	if(resume == 1)
+	{
+	
+		unsigned long diff_resume = (unsigned long)time(NULL);
+		unsigned long diff = diff_resume - diff_save;
+		
+		printf("SEC RESUME: %lu\n", diff_resume);
+		printf("SEC SAVE: %lu\n", diff_save);
+		printf("SEC DIFF: %lu\n", diff);
+		printf("SEC DIFF: %i\n", sec_new);
+		
+		while(diff != 0)
+		{
+				if(sec_new == 0)
+					sec_new = 59;
+				else
+					sec_new--;
+				
+				if((sec_new == 59) && (hour_new >=0))
+				{
+					if(min_new == 0)
+					{
+						min_new = 59;
+						if(hour_new != 0)
+							hour_new--;
+					}
+					else
+						min_new--;
+				}
+			if(hour_new == 0 && min_new == 0 && sec_new == 0)
+				break;
+			
+			diff--;
+			printf("NEW TIME: %02i:%02i:%02i\n", hour_new, min_new, sec_new);
+		}
+		if(diff != 0)
+		{
+			
+			edje_object_part_text_set(ly, "unit", "Countdown ended");
+// 			while(diff != 0)
+// 			{
+// 				if(over_s == 59)
+// 					over_s = 0;
+// 				else
+// 					over_s++;
+// 	
+// 				if(over_s == 0 )
+// 					over_m++;
+// 				
+// 				diff--;
+// 			}
+// 			timer_over = ecore_timer_add(1.0, _alarm_over, ly);
+		}
+		
+		printf("NEW DIFF: %lu\n", diff);
+	}
+	
+	
 	if(hour_new  == 0)
 		snprintf(buf, sizeof(buf), "%02i:%02i", min_new, sec_new);
 	
@@ -314,7 +378,6 @@ _resume(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUS
 		snprintf(buf, sizeof(buf), "%02i:%02i:%02i", hour_new, min_new, sec_new);
 		
 	edje_object_part_text_set(ly, "time", buf);
-	
 	_start_countdown(ly, NULL, NULL, NULL);
 }
 
@@ -595,7 +658,7 @@ _alarm_timer(void *data)
 	
    printf("ALARM\n");
 	
-   if (timer_sec)
+   if(timer_sec)
 	{
 	   ecore_timer_del(timer_sec);
 	   timer_sec = NULL;

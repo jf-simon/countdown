@@ -30,6 +30,11 @@ void         _set_content(void *data, Evas_Object *obj EINA_UNUSED, const char *
 
 int        id_num;
 
+Ecore_Timer *timer_all;
+Ecore_Timer *timer_sec;
+Ecore_Timer *timer_over;
+Ecore_Timer *timer_stopwatch;
+
 Evas_Object *win;
 Evas_Object *ly;
 
@@ -45,6 +50,8 @@ Eina_Bool   ci_vbell;
 int 			hour_new;
 int 			min_new;
 int			sec_new;
+unsigned long diff_save;
+Eina_Bool   resume;
 
 Eina_List *configlist;
 
@@ -61,5 +68,7 @@ typedef struct {
 		  int         hour_new;
 		  int         min_new;
 		  int         sec_new;
+		  unsigned long diff_save;
+		  Eina_Bool   resume;
 } Config_Item;
 
