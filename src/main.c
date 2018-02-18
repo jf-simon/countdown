@@ -200,52 +200,20 @@ _my_conf_descriptor_shutdown(void)
 static Eina_Bool 
 _gadget_exit(void *data, int type, void *event_data) 
 {
-	
    char buf[4096];
-// 	Eina_List *l;
-// 	Config_Item *list_data;
 	Ecore_Event_Signal_User *user = event_data;
 	
 	if ( user->number == 2) 
 	{
-
-//    EINA_LIST_FOREACH(configlist, l, list_data)
-//    {
-// 	   if(list_data->id == id_num)
-// 		{
-//          configlist = eina_list_remove(configlist, list_data);
-// 		}
-//    }
-	const char *profile;
-   profile = elm_config_profile_get();
+		const char *profile;
+		profile = elm_config_profile_get();
 		  
-   snprintf(buf, sizeof(buf), "%s/countdown/countdown_gadget_%d_%s.cfg", efreet_config_home_get(), id_num, profile);
-		ecore_file_unlink(buf);
-   printf("DEL ID\n");
-	
-// 	_save_eet();
-		
+		snprintf(buf, sizeof(buf), "%s/countdown/countdown_gadget_%d_%s.cfg", efreet_config_home_get(), id_num, profile);
+		ecore_file_unlink(buf);	
 	} 
-return EINA_TRUE;
+	return EINA_TRUE;
 }
 
-/*
-static void
-orient_change(void *data, Evas_Object *obj, void *event_info)
-{
-// 	Evas_Object *ly = data;
-   gorient = (uintptr_t)event_info;
-//    update_anchor_orient(data, gorient, ganchor, obj);
-}
-
-static void
-anchor_change(void *data, Evas_Object *obj, void *event_info)
-{
-// 	Evas_Object *ly = data;
-   ganchor = (uintptr_t)event_info;
-//    update_anchor_orient(data, gorient, ganchor, obj);
-}
-*/
 
 static void
 _values_to_zero()
@@ -274,37 +242,35 @@ _values_to_zero()
 static void
 _cancel_countdown(Evas_Object *edje_obj)
 {
-			_values_to_zero();
+	_values_to_zero();
 			
-// 			if(!strcmp(ci_name, "") || ci_name == NULL)
-// 			   edje_object_part_text_set(edje_obj, "name", "Countdown");
-// 			else
-				edje_object_part_text_set(edje_obj, "name", ci_name);
-			
-			edje_object_part_text_set(edje_obj, "time", "00:00:00");
-			edje_object_part_text_set(edje_obj, "unit", "");
+	edje_object_part_text_set(edje_obj, "name", ci_name);
+	edje_object_part_text_set(edje_obj, "time", "00:00:00");
+	edje_object_part_text_set(edje_obj, "unit", "");
 
-					
-			if (timer_all)
-			{
-				ecore_timer_del(timer_all);
-				timer_all = NULL;
-			}
-			if (timer_sec)
-			{
-				ecore_timer_del(timer_sec);
-				timer_sec = NULL;
-			}
-			if (timer_over)
-			{
-				ecore_timer_del(timer_over);
-				timer_over = NULL;
-			}
-			if (timer_stopwatch)
-			{
-				ecore_timer_del(timer_stopwatch);
-				timer_stopwatch = NULL;
-			}
+	if (timer_all)
+	{
+		ecore_timer_del(timer_all);
+		timer_all = NULL;
+	}
+	
+	if (timer_sec)
+	{
+		ecore_timer_del(timer_sec);
+		timer_sec = NULL;
+	}
+	
+	if (timer_over)
+	{
+		ecore_timer_del(timer_over);
+		timer_over = NULL;
+	}
+	
+	if (timer_stopwatch)
+	{
+		ecore_timer_del(timer_stopwatch);
+		timer_stopwatch = NULL;
+	}
 }
 
 void
@@ -350,8 +316,8 @@ _resume(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUS
 		}
 		if(diff != 0)
 		{
-			
 			edje_object_part_text_set(ly, "unit", "Countdown ended");
+			
 // 			while(diff != 0)
 // 			{
 // 				if(over_s == 59)
@@ -725,11 +691,8 @@ _pause_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 void
 _pause_stoppwatch(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
 {
-		char buf[64];
-
 		Evas_Object *edje_obj = elm_layout_edje_get(data);
 
-		
 		if(timer_stopwatch && ecore_timer_freeze_get(timer_stopwatch))
 		{
 		   ecore_timer_thaw(timer_stopwatch);
@@ -738,7 +701,6 @@ _pause_stoppwatch(void *data, Evas_Object *obj EINA_UNUSED, const char *emission
 		else
 		{
 		   ecore_timer_freeze(timer_stopwatch);
-		
          edje_object_part_text_set(edje_obj, "name", "paused");
 		}
 }
@@ -752,60 +714,56 @@ _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 		
 	if(hour_new  == 0 && min_new  == 0 && sec_new == 0)
 	{
-			hour_new = hour1*10 + hour;
-			min_new = min1*10 + min;
-			sec_new = sec1*10 + sec;
-		}
+		hour_new = hour1*10 + hour;
+		min_new = min1*10 + min;
+		sec_new = sec1*10 + sec;
+	}
 		
-		printf("%i:%i:%i\n", hour_new, min_new, sec_new);
-		double isec = fmod(sec_new, 60);
+	printf("%i:%i:%i\n", hour_new, min_new, sec_new);
+	double isec = fmod(sec_new, 60);
 		
-		if(isec == sec_new)
+	if(isec == sec_new)
 			printf(" ");
-		else
-		{
-			min_new++;
-			sec_new = isec;
-		}
+	else
+	{
+		min_new++;
+		sec_new = isec;
+	}
 			
-		double imin = fmod(min_new, 60);
+	double imin = fmod(min_new, 60);
 		
-		if(imin != min_new)
-// 			printf(" ");
-// 		else
-		{
-			hour_new++;
-			min_new = imin;
-		}
+	if(imin != min_new)
+	{
+		hour_new++;
+		min_new = imin;
+	}
 		
-//       double countdown_time = (((hour1*10) + hour)*3600) + (((min1*10) + min)*60) + (((sec1*10) + sec));
-      double countdown_time = (hour_new*3600) + (min_new*60) + (sec_new);
+   double countdown_time = (hour_new*3600) + (min_new*60) + (sec_new);
 		
-		
-	   timer_sec = ecore_timer_add(1.0, _sec_timer, ly);
-	   timer_all = ecore_timer_add(countdown_time, _alarm_timer, ly);
+   timer_sec = ecore_timer_add(1.0, _sec_timer, ly);
+   timer_all = ecore_timer_add(countdown_time, _alarm_timer, ly);
 
-		printf("COUNTDOWN_TIME: %f\n", countdown_time);
-      edje_object_part_text_set(data, "name", ci_name);
+	printf("COUNTDOWN_TIME: %f\n", countdown_time);
+   edje_object_part_text_set(data, "name", ci_name);
 }
 
 
 static void
 _toogle_stopwatch(Evas_Object *edje_obj)
 {
-		if(timer_stopwatch)
-		{
-		   ecore_timer_del(timer_stopwatch);
-			timer_stopwatch = NULL;
-         edje_object_part_text_set(edje_obj, "time", "00:00:00:00");
+	if(timer_stopwatch)
+	{
+		ecore_timer_del(timer_stopwatch);
+		timer_stopwatch = NULL;
+      edje_object_part_text_set(edje_obj, "time", "00:00:00:00");
 
-			_values_to_zero();
-		}
-		else
-		{
-			timer_stopwatch = ecore_timer_add(0.01, _stopwatch_run, ly);
-         edje_object_part_text_set(edje_obj, "name", "Stopwatch");
-		}
+		_values_to_zero();
+	}
+	else
+	{
+		timer_stopwatch = ecore_timer_add(0.01, _stopwatch_run, ly);
+      edje_object_part_text_set(edje_obj, "name", "Stopwatch");
+	}
 }
 
 
@@ -992,17 +950,9 @@ int elm_main(int argc, char *argv[])
    elm_win_resize_object_add(win, ly);
     // LAYOUT CREATE END// 
 
-//    evas_object_data_set(win, "config", config);
 	evas_object_resize(win, 50, 50);
 
-//     elm_win_resize_object_add(win, ly);
-// 	if(gadget == -1)
-// 	{
-// 		elm_layout_file_set(ly, buf, "countdown_add");
-// 		edje_object_part_text_set(ly, "unit", "go on dude");
-// 	}
-// 		else	
-	   elm_layout_file_set(ly, buf, "countdown");
+   elm_layout_file_set(ly, buf, "countdown");
 	
    evas_object_show(ly);
 	
@@ -1017,20 +967,14 @@ int elm_main(int argc, char *argv[])
    edje_object_signal_callback_add(ly, "sec", "sec_increase", _sec_increase, NULL);
 	
    edje_object_signal_callback_add(ly, "start", "countdown", _toogle_countdown, ly);
-//    edje_object_signal_callback_add(ly, "stop", "countdown", _toogle_countdown, ly);
 	
 	Evas_Object *edje_obj = elm_layout_edje_get(ly);
-// 	evas_object_smart_callback_add(win, "gadget_site_orient", orient_change, ly);
-//    evas_object_smart_callback_add(win, "gadget_site_anchor", anchor_change, ly);
    evas_object_smart_callback_add(win, "gadget_configure", _settings_1, edje_obj);
 	ecore_event_handler_add(ECORE_EVENT_SIGNAL_USER, _gadget_exit, NULL);
 	ecore_event_handler_add(ECORE_EVENT_SIGNAL_EXIT, _config_save, NULL);
 	
-    evas_object_event_callback_add(win, EVAS_CALLBACK_KEY_DOWN, key_down, ly);
-	 
-//     evas_object_event_callback_add(win, EVAS_CALLBACK_KEY_DOWN, key_down1, fl);
-	 
-	 ////
+   evas_object_event_callback_add(win, EVAS_CALLBACK_KEY_DOWN, key_down, ly);
+	
 	 
 	Evas_Object *en1 = elm_entry_add(win);
     elm_entry_line_wrap_set(en1, ELM_WRAP_WORD);
@@ -1044,6 +988,7 @@ int elm_main(int argc, char *argv[])
 	
 	_resume(edje_obj, NULL, NULL, NULL);
 	_save_eet();
+	
   //run app RUN!
   elm_run();
 
