@@ -721,6 +721,27 @@ _pause_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission 
 		}
 }
 	
+	
+void
+_pause_stoppwatch(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
+{
+		char buf[64];
+
+		Evas_Object *edje_obj = elm_layout_edje_get(data);
+
+		
+		if(timer_stopwatch && ecore_timer_freeze_get(timer_stopwatch))
+		{
+		   ecore_timer_thaw(timer_stopwatch);
+         edje_object_part_text_set(edje_obj, "name", "Stoppwatch");
+		}
+		else
+		{
+		   ecore_timer_freeze(timer_stopwatch);
+		
+         edje_object_part_text_set(edje_obj, "name", "paused");
+		}
+}
 
 void
 _start_countdown(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUSED, const char *source EINA_UNUSED)
@@ -909,6 +930,9 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 
    if(!strcmp(k, "space"))
    {
+		if(timer_stopwatch != NULL)
+		_pause_stoppwatch(data, NULL, NULL, NULL);
+		else
 		_pause_countdown(data, NULL, NULL, NULL);
    }
 

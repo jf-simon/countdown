@@ -318,7 +318,7 @@ _settings(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 									"- SPACE to pause/resume countdown<br>"
 									"<br>"
 									"- MOUSE WHEEL on \"hour:min:sec\" sets time<br>"
-									"- KLICK an \"name\" to start countdown<br>"
+									"- KLICK on \"name\" to start countdown<br>"
 									"</custom>");
    evas_object_size_hint_weight_set(lbl, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(lbl, EVAS_HINT_FILL, EVAS_HINT_FILL);
