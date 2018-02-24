@@ -102,7 +102,7 @@ _config_save(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void
 	if(found == 0)
 	{
 		list_data1->id = id_num;
-		list_data1->name = eina_stringshare_add("Countdown");
+		list_data1->name = eina_stringshare_add("NAME");
 		list_data1->r = ci_r;
 		list_data1->g = ci_g;
 		list_data1->b = ci_b;
