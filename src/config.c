@@ -43,7 +43,11 @@ _config_load(void *data)
 		min_new = 0;
 		resume = 0;
 	}
-
+	
+	edje_object_color_class_set(edje_obj, "colorclass", /* class name   */
+                               ci_r, ci_g, ci_b, ci_a,  /* Object color */
+                               255, 255, 255, 0,   /* Text outline */
+                               39, 90, 187, 255);  /* Text shadow  */
    edje_object_part_text_set(edje_obj, "name", ci_name);
 }
 
@@ -136,7 +140,10 @@ _colorselector_changed_cb(void *data, Evas_Object *obj, void *event_info EINA_UN
 	
 	evas_object_color_set(ic, ci_r, ci_g, ci_b, ci_a);
 	
-	set_color(ly);
+	edje_object_color_class_set(ly, "colorclass", /* class name   */
+                               ci_r, ci_g, ci_b, ci_a,  /* Object color */
+                               255, 255, 255, 0,   /* Text outline */
+                               39, 90, 187, 255);  /* Text shadow  */
 }
 
 

@@ -279,6 +279,8 @@ _resume(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUS
 	Evas_Object *ly = data;
    char buf[4096];
 	
+	//TODO handel finish "over time" countdowns
+	
 	if(resume == 1)
 	{
 	
@@ -289,6 +291,12 @@ _resume(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUS
 		printf("SEC SAVE: %lu\n", diff_save);
 		printf("SEC DIFF: %lu\n", diff);
 		printf("SEC DIFF: %i\n", sec_new);
+
+		if(diff <= ((hour_new*360)+(min_new*60)+(sec_new)))
+		{
+			edje_object_part_text_set(ly, "unit", "Countdown ended");
+			return;
+		}
 		
 		while(diff != 0)
 		{
@@ -314,10 +322,13 @@ _resume(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUS
 			diff--;
 			printf("NEW TIME: %02i:%02i:%02i\n", hour_new, min_new, sec_new);
 		}
-		if(diff != 0)
+		
+/*
+		if(diff <= 0)
 		{
-			edje_object_part_text_set(ly, "unit", "Countdown ended");
 			
+			
+			return;
 // 			while(diff != 0)
 // 			{
 // 				if(over_s == 59)
@@ -331,7 +342,7 @@ _resume(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUS
 // 				diff--;
 // 			}
 // 			timer_over = ecore_timer_add(1.0, _alarm_over, ly);
-		}
+		}*/
 		
 		printf("NEW DIFF: %lu\n", diff);
 	}
@@ -341,21 +352,23 @@ _resume(void *data, Evas_Object *obj EINA_UNUSED, const char *emission EINA_UNUS
 		snprintf(buf, sizeof(buf), "%02i:%02i", min_new, sec_new);
 	
 	if(hour_new  == 0 && min_new == 0 && sec_new == 0)
+	{
 		snprintf(buf, sizeof(buf), "%02i:%02i:%02i", hour_new, min_new, sec_new);
-		
+			edje_object_part_text_set(ly, "unit", "Countdown ended");
+	}	
 	edje_object_part_text_set(ly, "time", buf);
 	_start_countdown(ly, NULL, NULL, NULL);
 }
-
+/*
 void
 set_color(Evas_Object *ly)
 {
-	edje_object_color_class_set(ly, "colorclass", /* class name   */
-                               ci_r, ci_g, ci_b, ci_a,  /* Object color */
-                               255, 255, 255, 0,   /* Text outline */
-                               39, 90, 187, 255);  /* Text shadow  */
+	edje_object_color_class_set(ly, "colorclass", // class name   
+                               ci_r, ci_g, ci_b, ci_a,  // Object color
+                               255, 255, 255, 0,   // Text outline
+                               39, 90, 187, 255);  // Text shadow 
 	printf("SET COLOR: %i %i %i %i,\n", ci_r,ci_g,ci_b,ci_a);
-}
+}*/
 
 
 
@@ -830,10 +843,7 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		else if(!strcmp(k, "KP_Prior")) key = "9";
 		
 
-// 		if(!strcmp(ci_name, ""))
-// 		   edje_object_part_text_set(edje_obj, "name", "Countdown");
-// 		else
-			edje_object_part_text_set(edje_obj, "name", ci_name);
+		edje_object_part_text_set(edje_obj, "name", ci_name);
 		
 		char buf[64];
 
@@ -873,11 +883,8 @@ void key_down(void *data, Evas *e EINA_UNUSED, Evas_Object *obj EINA_UNUSED, voi
 		
 		   snprintf(buf, sizeof(buf), "%i%i:%i%i:%i%i", hour1, hour, min1, min, sec1, sec);
 			edje_object_part_text_set(edje_obj, "time", buf);
-			
-// 			if(!strcmp(ci_name, "") || (ci_name == NULL))
-// 			   edje_object_part_text_set(edje_obj, "name", "Countdown");
-// 			else
-				edje_object_part_text_set(edje_obj, "name", ci_name);
+
+			edje_object_part_text_set(edje_obj, "name", ci_name);
 			
 		}else
 		{		
@@ -983,9 +990,7 @@ int elm_main(int argc, char *argv[])
     elm_object_part_content_set(ly, "name1", en1);
 	///
 	_config_load(ly);
-	
-	set_color(edje_obj);
-	
+// 	set_color(edje_obj);	
 	_resume(edje_obj, NULL, NULL, NULL);
 	_save_eet();
 	
